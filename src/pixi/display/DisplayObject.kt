@@ -3,10 +3,12 @@ package pixi.display
 import pixi.Color
 import pixi.math.Matrix
 import pixi.math.Point
+import pixi.math.Transform
 import pixi.renderers.WebGLRenderer
 
 open class DisplayObject {
-    var transform: TransformBase = Transform()
+//    var transform: TransformBase = Transform()
+    var transform = Transform()
 
     open val children: MutableList<DisplayObject>?
         get() = null
@@ -90,7 +92,7 @@ open class DisplayObject {
     open fun objectUpdateTransform() {
         val _parent = parent
 
-        transform.updateTransform(_parent?.transform ?: TransformBase.IDENTITY)
+        transform.updateTransform(_parent?.transform ?: Transform.IDENTITY)
 
         if (_parent != null) {
             worldMulColor.copy(this.mulColor)

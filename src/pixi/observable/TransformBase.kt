@@ -1,7 +1,7 @@
-package pixi.display
+package pixi.observable
 
 import pixi.math.Matrix
-import pixi.math.Point
+import pixi.observable.Point
 
 interface TransformBase {
     var worldTransform: Matrix;

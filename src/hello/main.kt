@@ -14,6 +14,8 @@ import pixi.textures.Texture
 
 val width = 800
 val height = 600
+val MAX_BUNNIES = 100000
+val INIT_BUNNIES = 100000
 
 val renderer = WebGLRenderer(width, height, { backgroundColor = Color(0x1099bb) })
 
@@ -36,7 +38,7 @@ val images = Array<HTMLImageElement>(MAX_TEXTURES, { i -> document.createElement
 fun preload() {
     var loaded = 0
     for (i in 0..images.size - 1) {
-        images[i].onload =  {
+        images[i].onload = {
             loaded++
             if (loaded == images.size) {
                 window.setTimeout({ init() }, 0)
@@ -51,13 +53,6 @@ var adding = false
 var container = Container()
 var count = 0
 
-var gravity = 0.75
-
-var maxX = width * 1f;
-var minX = 0f;
-var maxY = height * 1f;
-var minY = 0f;
-
 fun init() {
     textures = Array<Texture>(MAX_TEXTURES, { i -> Texture(BaseTexture(images[i])) })
 
@@ -70,7 +65,7 @@ fun init() {
     document.addEventListener("touchstart", { adding = true }, true)
     document.addEventListener("touchend", { adding = false }, true)
 
-    for (i in 0..99) {
+    for (i in 1..INIT_BUNNIES) {
         addBunny()
     }
 
@@ -87,26 +82,45 @@ fun raf() {
     window.requestAnimationFrame { raf() }
 }
 
+//class Bunny(tex: Texture) : Sprite(tex) {
+//    var speedX = 0f
+//    var speedY = 0f
+//    var spin = 0f
+//}
+
+//pre-create bunnies?
+var bunnies = js("([])")
+
 fun addBunny() {
-    var bunny = Sprite(textures[Math.floor(Math.random() * MAX_TEXTURES)])
+    if (count >= MAX_BUNNIES) {
+        return
+    }
+    var bunny : dynamic = Sprite(textures[Math.floor(Math.random() * MAX_TEXTURES)])
 
-
-    bunny.js.speedX = Math.random() * 10;
-    bunny.js.speedY = (Math.random() * 10) - 5;
-    if (Math.random()<0.5) {
+    bunny.speedX = Math.random() * 10;
+    bunny.speedY = (Math.random() * 10) - 5;
+    if (Math.random() < 0.5) {
         bunny.position.x = width.toFloat()
     }
 
-    bunny.position.y = (Math.random() * height/2).toFloat();
+    bunny.position.y = (Math.random() * height / 2).toFloat();
 
     container.addChild(bunny)
+
+    bunnies.push(bunny)
 
     count++
 }
 
 fun update() {
+    var maxX = width * 1f;
+    var minX = 0f;
+    var maxY = height * 1f;
+    var minY = 0f;
+    var gravity = 0.75f
+
     if (adding) {
-        if (count < 100000) {
+        if (count < MAX_BUNNIES) {
             for (i in 0..99) {
                 addBunny()
             }
@@ -115,31 +129,32 @@ fun update() {
     }
 
     for (i in 0..count - 1) {
-        var bunny = container.children[i];
-        //bunny.rotation += bunny.js.spin as Float
-        var transform = bunny;
-        transform.position.x += bunny.js.speedX as Float;
-        transform.position.y += bunny.js.speedY as Float;
-        bunny.js.speedY += gravity;
+        var bunny = bunnies[i]
+        //bunny.rotation += bunny.spin as Float
+        var transform = bunny.transform
+        var position = transform.position
+        position.x = position.x + bunny.speedX
+        position.y = position.y + bunny.speedY
+        bunny.speedY = bunny.speedY + gravity
 
-        if (transform.position.x > maxX) {
-            bunny.js.speedX *= -1;
-            transform.position.x = maxX;
-        } else if (transform.position.x < minX) {
-            bunny.js.speedX *= -1;
-            transform.position.x = minX;
+        if (position.x > maxX) {
+            bunny.speedX *= -1;
+            position.x = maxX
+        } else if (position.x < minX) {
+            bunny.speedX *= -1;
+            position.x = minX
         }
 
-        if (transform.position.y > maxY) {
-            bunny.js.speedY *= -0.85;
-            transform.position.y = maxY;
-            bunny.js.spin = (Math.random() - 0.5) * 0.2
+        if (position.y > maxY) {
+            bunny.speedY *= -0.85f;
+            position.y = maxY
+            bunny.spin = ((Math.random() - 0.5) * 0.2).toFloat()
             if (Math.random() > 0.5) {
-                bunny.js.speedY -= Math.random() * 6;
+                bunny.speedY -= (Math.random() * 6).toFloat();
             }
-        } else if (transform.position.y < minY) {
-            bunny.js.speedY = 0;
-            transform.position.y = minY;
+        } else if (position.y < minY) {
+            bunny.speedY = 0f;
+            position.y = minY
         }
     }
 }
@@ -152,8 +167,8 @@ fun main(args: Array<String>) {
     jq {
         val body = document.body!!
         body.appendChild(renderer.view)
-        body.appendChild( counter);
-        body.appendChild( stats.domElement );
+        body.appendChild(counter);
+        body.appendChild(stats.domElement);
         stats.domElement.style.position = "absolute";
         stats.domElement.style.top = "0px";
 

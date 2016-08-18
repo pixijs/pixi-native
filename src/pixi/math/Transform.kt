@@ -1,33 +1,28 @@
-package pixi.display
+package pixi.math
 
-import pixi.math.Matrix
-import pixi.math.ObservablePoint
-import pixi.math.Point
-import pixi.math.Versionable
-
-class Transform : TransformBase {
+class Transform {
     fun invalidateParent() {
         _parentID = -1;
     }
 
-    override var worldTransform = Matrix();
-    override var localTransform = Matrix();
+    var worldTransform = Matrix();
+    var localTransform = Matrix();
 
-    override var _worldID = 0;
+    var _worldID = 0;
 
-    override var _parentID = -1;
+    var _parentID = -1;
 
     var _localID = 0;
 
     var _currentLocalID = 0;
 
-    override val position = Point();
+    val position = Point();
 
-    override val scale = Point(1f, 1f);
+    val scale = Point(1f, 1f);
 
-    override val pivot = Point();
+    val pivot = Point();
 
-    override val skew = Point();
+    val skew = Point();
 
     private var _rotation: Float = 0f;
     private var _sr: Float = 0f;
@@ -73,7 +68,7 @@ class Transform : TransformBase {
         _parentID = -1;
     }
 
-    override fun updateTransform(parentTransform: TransformBase) {
+    fun updateTransform(parentTransform: Transform) {
         val pt = parentTransform.worldTransform;
         val wt = worldTransform;
         val lt = localTransform;
@@ -99,5 +94,9 @@ class Transform : TransformBase {
         wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
 
         _parentID = parentTransform._worldID;
+    }
+
+    companion object {
+        val IDENTITY = Transform();
     }
 }

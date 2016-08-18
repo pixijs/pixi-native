@@ -1,4 +1,6 @@
-package pixi.math
+package pixi.observable
+
+import pixi.math.Versionable
 
 class ObservablePoint(var cb: Versionable, x: Float = 0f, y: Float = 0f) : Point(x, y) {
 

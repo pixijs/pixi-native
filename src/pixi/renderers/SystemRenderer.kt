@@ -5,7 +5,7 @@ import org.w3c.dom.Node
 import pixi.utils.*
 import pixi.*
 import pixi.display.DisplayObject
-import pixi.display.Transform
+import pixi.observable.Transform
 import pixi.textures.RenderTexture
 import kotlin.browser.document
 
