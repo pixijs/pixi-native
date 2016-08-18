@@ -1,4 +1,4 @@
-Pixi-native — Cross-platform 2D renderer on Kotlin
+Pixi-native — Cross-platform implementation of PIXI.js
 =============
 
 The aim of this project is to provide a fast lightweight 2D library that works
