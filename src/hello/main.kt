@@ -15,7 +15,7 @@ import pixi.textures.Texture
 val width = 800
 val height = 600
 val MAX_BUNNIES = 100000
-val INIT_BUNNIES = 100000
+val INIT_BUNNIES = 100
 
 val renderer = WebGLRenderer(width, height, { backgroundColor = Color(0x1099bb) })
 
