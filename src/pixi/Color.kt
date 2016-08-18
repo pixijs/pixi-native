@@ -25,10 +25,10 @@ class Color() {
     var rgba: Float32Array
         get() = _rgba;
         set(value) {
-            _rgbInt = (Math.floor(value[0] * 255f) shl 16) or
-                    (Math.floor(value[1] * 255f) shl 8) or
-                    Math.floor(value[2] * 255f);
-            _alpha = value[3];
+            _rgbInt = (Math.floor(value.g(0) * 255f) shl 16) or
+                    (Math.floor(value.g(1) * 255f) shl 8) or
+                    Math.floor(value.g(2) * 255f);
+            _alpha = value.g(3);
         }
 
     var alpha: Float
@@ -39,16 +39,16 @@ class Color() {
         }
 
     val r: Float
-        get() = _rgba[0]
+        get() = _rgba.g(0)
 
     val g: Float
-        get() = _rgba[1]
+        get() = _rgba.g(1)
 
     val b: Float
-        get() = _rgba[1]
+        get() = _rgba.g(1)
 
     val a: Float
-        get() = _rgba[1]
+        get() = _rgba.g(1)
 
     fun setVec4(r: Float, g: Float, b: Float, a: Float) {
         _rgba[0] = r;
@@ -86,10 +86,10 @@ class Color() {
         }
 
     fun copy(clr: Color) {
-        _rgba[0] = clr._rgba[0];
-        _rgba[1] = clr._rgba[1];
-        _rgba[2] = clr._rgba[2];
-        _rgba[3] = clr._rgba[3];
+        _rgba[0] = clr._rgba.g(0);
+        _rgba[1] = clr._rgba.g(1);
+        _rgba[2] = clr._rgba.g(2);
+        _rgba[3] = clr._rgba.g(3);
         _alpha = clr._alpha;
         _rgbInt = clr._rgbInt;
     }
@@ -97,15 +97,15 @@ class Color() {
     fun mul(color: Color) {
         if (color._rgbInt === 0xffffff && color._alpha === 1.0f) return;
         //TODO: use fast multiplication here
-        _rgba[0] = _rgba[0] * color._rgba[0];
-        _rgba[1] = _rgba[1] * color._rgba[1];
-        _rgba[2] = _rgba[2] * color._rgba[2];
-        _rgba[3] = _rgba[3] * color._rgba[3];
+        _rgba[0] = _rgba.g(0) * color._rgba.g(0);
+        _rgba[1] = _rgba.g(1) * color._rgba.g(1);
+        _rgba[2] = _rgba.g(2) * color._rgba.g(2);
+        _rgba[3] = _rgba.g(3) * color._rgba.g(3);
 
-        _rgbInt = (Math.floor(_rgba[0] * 255f) shl 16) or
-                (Math.floor(_rgba[1] * 255f) shl 8) or
-                Math.floor(_rgba[2] * 255f);
-        _alpha = _rgba[3];
+        _rgbInt = (Math.floor(_rgba.g(0) * 255f) shl 16) or
+                (Math.floor(_rgba.g(1) * 255f) shl 8) or
+                Math.floor(_rgba.g(2) * 255f);
+        _alpha = _rgba.g(3);
     }
 
     constructor(rgb: Int) : this() {
@@ -121,7 +121,7 @@ class Color() {
     }
 
     constructor(css: String) : this() {
-        if (css[0] === '#') {
+        if (css[0] == '#') {
             if (css.size === 7) {
                 this.rgbHex = css;
             }
