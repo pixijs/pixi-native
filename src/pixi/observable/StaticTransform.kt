@@ -1,7 +1,7 @@
-package pixi.display
+package pixi.observable
 
 import pixi.math.Matrix
-import pixi.math.ObservablePoint
+import pixi.observable.ObservablePoint
 import pixi.math.Versionable
 
 class StaticTransform : TransformBase, Versionable {
