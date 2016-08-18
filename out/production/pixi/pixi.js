@@ -4,6 +4,8 @@ var pixi = function (Kotlin) {
     hello: Kotlin.definePackage(function () {
       this.width = 800;
       this.height = 600;
+      this.MAX_BUNNIES = 100000;
+      this.INIT_BUNNIES = 100000;
       this.renderer = _.pixi.renderers.WebGLRenderer_init_2yge5z$(_.hello.width, _.hello.height, _.hello.renderer$f);
       this.files = ['rabbitv3_ash.png', 'rabbitv3_batman.png', 'rabbitv3_bb8.png', 'rabbitv3_neo.png', 'rabbitv3_sonic.png', 'rabbitv3_spidey.png', 'rabbitv3_stormtrooper.png', 'rabbitv3_superman.png', 'rabbitv3_tron.png', 'rabbitv3_wolverine.png', 'rabbitv3.png', 'rabbitv3_frankenstein.png'];
       this.MAX_TEXTURES = Math.min(_.hello.files.length, _.hello.renderer.spriteRenderer.MAX_TEXTURES);
@@ -12,11 +14,7 @@ var pixi = function (Kotlin) {
       this.adding = false;
       this.container = new _.pixi.display.Container();
       this.count = 0;
-      this.gravity = 0.75;
-      this.maxX = _.hello.width * 1.0;
-      this.minX = 0.0;
-      this.maxY = _.hello.height * 1.0;
-      this.minY = 0.0;
+      this.bunnies = [];
       this.counter = document.createElement('div');
       this.stats = new Stats();
     }, /** @lends _.hello */ {
@@ -63,11 +61,13 @@ var pixi = function (Kotlin) {
         _.hello.adding = false;
       },
       init: function () {
+        var tmp$0;
         _.hello.textures = Kotlin.arrayFromFun(_.hello.MAX_TEXTURES, _.hello.init$f);
         $(_.hello.renderer.view).mousedown(_.hello.init$f_0).mouseup(_.hello.init$f_1);
         document.addEventListener('touchstart', _.hello.init$f_2, true);
         document.addEventListener('touchend', _.hello.init$f_3, true);
-        for (var i = 0; i <= 99; i++) {
+        tmp$0 = _.hello.INIT_BUNNIES;
+        for (var i = 1; i <= tmp$0; i++) {
           _.hello.addBunny();
         }
         _.hello.counter.innerHTML = _.hello.count.toString() + ' BUNNIES';
@@ -79,25 +79,34 @@ var pixi = function (Kotlin) {
       raf: function () {
         _.hello.stats.begin();
         _.hello.update();
-        _.hello.renderer.render_e5kpu6$(_.hello.container);
+        _.hello.renderer.render_3fanjz$(_.hello.container);
         _.hello.stats.end();
         window.requestAnimationFrame(_.hello.raf$f);
       },
       addBunny: function () {
+        if (_.hello.count >= _.hello.MAX_BUNNIES) {
+          return;
+        }
         var bunny = new _.pixi.sprite.Sprite(_.hello.textures[Math.floor(Math.random() * _.hello.MAX_TEXTURES)]);
-        bunny.js.speedX = Math.random() * 10;
-        bunny.js.speedY = Math.random() * 10 - 5;
+        bunny.speedX = Math.random() * 10;
+        bunny.speedY = Math.random() * 10 - 5;
         if (Math.random() < 0.5) {
           bunny.position.x = _.hello.width;
         }
         bunny.position.y = Math.random() * _.hello.height / 2;
         _.hello.container.addChild_ps4ljl$(bunny);
+        _.hello.bunnies.push(bunny);
         _.hello.count++;
       },
       update: function () {
-        var tmp$1, tmp$2, tmp$3;
+        var tmp$1;
+        var maxX = _.hello.width * 1.0;
+        var minX = 0.0;
+        var maxY = _.hello.height * 1.0;
+        var minY = 0.0;
+        var gravity = 0.75;
         if (_.hello.adding) {
-          if (_.hello.count < 100000) {
+          if (_.hello.count < _.hello.MAX_BUNNIES) {
             for (var i = 0; i <= 99; i++) {
               _.hello.addBunny();
             }
@@ -106,30 +115,31 @@ var pixi = function (Kotlin) {
         }
         tmp$1 = _.hello.count - 1;
         for (var i_0 = 0; i_0 <= tmp$1; i_0++) {
-          var bunny = _.hello.container.children.get_za3lpa$(i_0);
-          var transform = bunny;
-          transform.position.x = transform.position.x + (typeof (tmp$2 = bunny.js.speedX) === 'number' ? tmp$2 : Kotlin.throwCCE());
-          transform.position.y = transform.position.y + (typeof (tmp$3 = bunny.js.speedY) === 'number' ? tmp$3 : Kotlin.throwCCE());
-          bunny.js.speedY += _.hello.gravity;
-          if (transform.position.x > _.hello.maxX) {
-            bunny.js.speedX *= -1;
-            transform.position.x = _.hello.maxX;
+          var bunny = _.hello.bunnies[i_0];
+          var transform = bunny.transform;
+          var position = transform.position;
+          position.x = position.x + bunny.speedX;
+          position.y = position.y + bunny.speedY;
+          bunny.speedY = bunny.speedY + gravity;
+          if (position.x > maxX) {
+            bunny.speedX *= -1;
+            position.x = maxX;
           }
-           else if (transform.position.x < _.hello.minX) {
-            bunny.js.speedX *= -1;
-            transform.position.x = _.hello.minX;
+           else if (position.x < minX) {
+            bunny.speedX *= -1;
+            position.x = minX;
           }
-          if (transform.position.y > _.hello.maxY) {
-            bunny.js.speedY *= -0.85;
-            transform.position.y = _.hello.maxY;
-            bunny.js.spin = (Math.random() - 0.5) * 0.2;
+          if (position.y > maxY) {
+            bunny.speedY *= -0.8500000238418579;
+            position.y = maxY;
+            bunny.spin = (Math.random() - 0.5) * 0.2;
             if (Math.random() > 0.5) {
-              bunny.js.speedY -= Math.random() * 6;
+              bunny.speedY -= Math.random() * 6;
             }
           }
-           else if (transform.position.y < _.hello.minY) {
-            bunny.js.speedY = 0;
-            transform.position.y = _.hello.minY;
+           else if (position.y < minY) {
+            bunny.speedY = 0.0;
+            position.y = minY;
           }
         }
       },
@@ -543,7 +553,7 @@ var pixi = function (Kotlin) {
           }
         }),
         DisplayObject: Kotlin.createClass(null, function DisplayObject() {
-          this.transform = new _.pixi.display.Transform();
+          this.transform = new _.pixi.math.Transform();
           this.mulColor = new _.pixi.Color();
           this.worldMulColor = new _.pixi.Color();
           this.visible = true;
@@ -643,7 +653,7 @@ var pixi = function (Kotlin) {
           objectUpdateTransform: function () {
             var tmp$0;
             var _parent = this.parent;
-            this.transform.updateTransform_th4r7x$((tmp$0 = _parent != null ? _parent.transform : null) != null ? tmp$0 : _.pixi.display.TransformBase.Companion.IDENTITY);
+            this.transform.updateTransform_egoeju$((tmp$0 = _parent != null ? _parent.transform : null) != null ? tmp$0 : _.pixi.math.Transform.Companion.IDENTITY);
             if (_parent != null) {
               this.worldMulColor.copy_sgj01r$(this.mulColor);
               this.worldMulColor.mul_sgj01r$(_parent.worldMulColor);
@@ -656,287 +666,6 @@ var pixi = function (Kotlin) {
           },
           renderWebGL_75dbqe$: function (renderer) {
             this.objectRenderWebGL_75dbqe$(renderer);
-          }
-        }),
-        StaticTransform: Kotlin.createClass(function () {
-          return [_.pixi.math.Versionable, _.pixi.display.TransformBase];
-        }, function StaticTransform() {
-          this.$worldTransform_iw9xi2$ = new _.pixi.math.Matrix();
-          this.$localTransform_olc55t$ = new _.pixi.math.Matrix();
-          this.$_worldID_repe$ = 0;
-          this.$_parentID_i6i37o$ = -1;
-          this._localID = 0;
-          this._currentLocalID = 0;
-          this.$position_j5hog9$ = new _.pixi.math.ObservablePoint(this);
-          this.$scale_u13onq$ = new _.pixi.math.ObservablePoint(this, 1.0, 1.0);
-          this.$pivot_u2msv2$ = new _.pixi.math.ObservablePoint(this);
-          this.$skew_7ubyfq$ = new _.pixi.math.ObservablePoint(this);
-          this._rotation_1x5ibn$ = 0.0;
-          this._sr_bpk0yq$ = 0.0;
-          this._cr_bpk1ci$ = 1.0;
-          this._cy_bpk1cb$ = 1.0;
-          this._sy_bpk0yj$ = 0.0;
-          this._nsx_7uonm4$ = 0.0;
-          this._cx_bpk1cc$ = 1.0;
-        }, /** @lends _.pixi.display.StaticTransform.prototype */ {
-          invalidate: function () {
-            this._localID++;
-          },
-          invalidateParent: function () {
-            this._parentID = -1;
-          },
-          worldTransform: {
-            get: function () {
-              return this.$worldTransform_iw9xi2$;
-            },
-            set: function (worldTransform) {
-              this.$worldTransform_iw9xi2$ = worldTransform;
-            }
-          },
-          localTransform: {
-            get: function () {
-              return this.$localTransform_olc55t$;
-            },
-            set: function (localTransform) {
-              this.$localTransform_olc55t$ = localTransform;
-            }
-          },
-          _worldID: {
-            get: function () {
-              return this.$_worldID_repe$;
-            },
-            set: function (_worldID) {
-              this.$_worldID_repe$ = _worldID;
-            }
-          },
-          _parentID: {
-            get: function () {
-              return this.$_parentID_i6i37o$;
-            },
-            set: function (_parentID) {
-              this.$_parentID_i6i37o$ = _parentID;
-            }
-          },
-          position: {
-            get: function () {
-              return this.$position_j5hog9$;
-            }
-          },
-          scale: {
-            get: function () {
-              return this.$scale_u13onq$;
-            }
-          },
-          pivot: {
-            get: function () {
-              return this.$pivot_u2msv2$;
-            }
-          },
-          skew: {
-            get: function () {
-              return this.$skew_7ubyfq$;
-            }
-          },
-          rotation_649u8u$: {
-            get: function () {
-              return this._rotation_1x5ibn$;
-            },
-            set: function (value) {
-              this._rotation_1x5ibn$ = value;
-              this._sr_bpk0yq$ = Math.sin(value);
-              this._cr_bpk1ci$ = Math.cos(value);
-            }
-          },
-          updateSkew: function () {
-            this._cy_bpk1cb$ = Math.cos(this.skew.y);
-            this._sy_bpk0yj$ = Math.sin(this.skew.y);
-            this._nsx_7uonm4$ = Math.sin(this.skew.x);
-            this._cx_bpk1cc$ = Math.cos(this.skew.x);
-            this._localID++;
-          },
-          updateLocalTransform: function () {
-            var lt = this.localTransform;
-            if (this._localID !== this._currentLocalID) {
-              var a = this._cr_bpk1ci$ * this.scale.x;
-              var b = this._sr_bpk0yq$ * this.scale.x;
-              var c = -this._sr_bpk0yq$ * this.scale.y;
-              var d = this._cr_bpk1ci$ * this.scale.y;
-              lt.a = this._cy_bpk1cb$ * a + this._sy_bpk0yj$ * c;
-              lt.b = this._cy_bpk1cb$ * b + this._sy_bpk0yj$ * d;
-              lt.c = this._nsx_7uonm4$ * a + this._cx_bpk1cc$ * c;
-              lt.d = this._nsx_7uonm4$ * b + this._cx_bpk1cc$ * d;
-              lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
-              lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
-              this._currentLocalID = this._localID;
-              this._parentID = -1;
-            }
-          },
-          updateTransform_th4r7x$: function (parentTransform) {
-            var pt = parentTransform.worldTransform;
-            var wt = this.worldTransform;
-            var lt = this.localTransform;
-            if (this._localID !== this._currentLocalID) {
-              var a = this._cr_bpk1ci$ * this.scale.x;
-              var b = this._sr_bpk0yq$ * this.scale.x;
-              var c = -this._sr_bpk0yq$ * this.scale.y;
-              var d = this._cr_bpk1ci$ * this.scale.y;
-              lt.a = this._cy_bpk1cb$ * a + this._sy_bpk0yj$ * c;
-              lt.b = this._cy_bpk1cb$ * b + this._sy_bpk0yj$ * d;
-              lt.c = this._nsx_7uonm4$ * a + this._cx_bpk1cc$ * c;
-              lt.d = this._nsx_7uonm4$ * b + this._cx_bpk1cc$ * d;
-              lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
-              lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
-              this._currentLocalID = this._localID;
-              this._parentID = -1;
-            }
-            if (this._parentID !== parentTransform._worldID) {
-              wt.a = lt.a * pt.a + lt.b * pt.c;
-              wt.b = lt.a * pt.b + lt.b * pt.d;
-              wt.c = lt.c * pt.a + lt.d * pt.c;
-              wt.d = lt.c * pt.b + lt.d * pt.d;
-              wt.tx = lt.tx * pt.a + lt.ty * pt.c + pt.tx;
-              wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
-              this._parentID = parentTransform._worldID;
-              this._worldID++;
-            }
-          }
-        }),
-        Transform: Kotlin.createClass(function () {
-          return [_.pixi.display.TransformBase];
-        }, function Transform() {
-          this.$worldTransform_zfr2yc$ = new _.pixi.math.Matrix();
-          this.$localTransform_tqoval$ = new _.pixi.math.Matrix();
-          this.$_worldID_qovsjk$ = 0;
-          this.$_parentID_r9181a$ = -1;
-          this._localID = 0;
-          this._currentLocalID = 0;
-          this.$position_7impdx$ = new _.pixi.math.Point();
-          this.$scale_o79n48$ = new _.pixi.math.Point(1.0, 1.0);
-          this.$pivot_o8srbk$ = new _.pixi.math.Point();
-          this.$skew_9y1tt0$ = new _.pixi.math.Point();
-          this._rotation_nof8ej$ = 0.0;
-          this._sr_tgry0c$ = 0.0;
-          this._cr_tgrxmk$ = 1.0;
-          this._cy_tgrxmr$ = 1.0;
-          this._sy_tgry0j$ = 0.0;
-          this._nsx_9yeize$ = 0.0;
-          this._cx_tgrxmq$ = 1.0;
-        }, /** @lends _.pixi.display.Transform.prototype */ {
-          invalidateParent: function () {
-            this._parentID = -1;
-          },
-          worldTransform: {
-            get: function () {
-              return this.$worldTransform_zfr2yc$;
-            },
-            set: function (worldTransform) {
-              this.$worldTransform_zfr2yc$ = worldTransform;
-            }
-          },
-          localTransform: {
-            get: function () {
-              return this.$localTransform_tqoval$;
-            },
-            set: function (localTransform) {
-              this.$localTransform_tqoval$ = localTransform;
-            }
-          },
-          _worldID: {
-            get: function () {
-              return this.$_worldID_qovsjk$;
-            },
-            set: function (_worldID) {
-              this.$_worldID_qovsjk$ = _worldID;
-            }
-          },
-          _parentID: {
-            get: function () {
-              return this.$_parentID_r9181a$;
-            },
-            set: function (_parentID) {
-              this.$_parentID_r9181a$ = _parentID;
-            }
-          },
-          position: {
-            get: function () {
-              return this.$position_7impdx$;
-            }
-          },
-          scale: {
-            get: function () {
-              return this.$scale_o79n48$;
-            }
-          },
-          pivot: {
-            get: function () {
-              return this.$pivot_o8srbk$;
-            }
-          },
-          skew: {
-            get: function () {
-              return this.$skew_9y1tt0$;
-            }
-          },
-          rotation_kjujlc$: {
-            get: function () {
-              return this._rotation_nof8ej$;
-            },
-            set: function (value) {
-              this._rotation_nof8ej$ = value;
-              this._sr_tgry0c$ = Math.sin(value);
-              this._cr_tgrxmk$ = Math.cos(value);
-            }
-          },
-          updateSkew: function () {
-            this._cy_tgrxmr$ = Math.cos(this.skew.y);
-            this._sy_tgry0j$ = Math.sin(this.skew.y);
-            this._nsx_9yeize$ = Math.sin(this.skew.x);
-            this._cx_tgrxmq$ = Math.cos(this.skew.x);
-            this._localID++;
-          },
-          updateLocalTransform: function () {
-            var lt = this.localTransform;
-            var a = this._cr_tgrxmk$ * this.scale.x;
-            var b = this._sr_tgry0c$ * this.scale.x;
-            var c = -this._sr_tgry0c$ * this.scale.y;
-            var d = this._cr_tgrxmk$ * this.scale.y;
-            lt.a = this._cy_tgrxmr$ * a + this._sy_tgry0j$ * c;
-            lt.b = this._cy_tgrxmr$ * b + this._sy_tgry0j$ * d;
-            lt.c = this._nsx_9yeize$ * a + this._cx_tgrxmq$ * c;
-            lt.d = this._nsx_9yeize$ * b + this._cx_tgrxmq$ * d;
-            lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
-            lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
-            this._parentID = -1;
-          },
-          updateTransform_th4r7x$: function (parentTransform) {
-            var pt = parentTransform.worldTransform;
-            var wt = this.worldTransform;
-            var lt = this.localTransform;
-            var a = this._cr_tgrxmk$ * this.scale.x;
-            var b = this._sr_tgry0c$ * this.scale.x;
-            var c = -this._sr_tgry0c$ * this.scale.y;
-            var d = this._cr_tgrxmk$ * this.scale.y;
-            lt.a = this._cy_tgrxmr$ * a + this._sy_tgry0j$ * c;
-            lt.b = this._cy_tgrxmr$ * b + this._sy_tgry0j$ * d;
-            lt.c = this._nsx_9yeize$ * a + this._cx_tgrxmq$ * c;
-            lt.d = this._nsx_9yeize$ * b + this._cx_tgrxmq$ * d;
-            lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
-            lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
-            wt.a = lt.a * pt.a + lt.b * pt.c;
-            wt.b = lt.a * pt.b + lt.b * pt.d;
-            wt.c = lt.c * pt.a + lt.d * pt.c;
-            wt.d = lt.c * pt.b + lt.d * pt.d;
-            wt.tx = lt.tx * pt.a + lt.ty * pt.c + pt.tx;
-            wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
-            this._parentID = parentTransform._worldID;
-          }
-        }),
-        TransformBase: Kotlin.createTrait(null, null, /** @lends _.pixi.display.TransformBase */ {
-          Companion: Kotlin.createObject(null, function Companion() {
-            _.pixi.display.TransformBase.Companion.IDENTITY = new _.pixi.display.Transform();
-          }),
-          object_initializer$: function () {
-            _.pixi.display.TransformBase.Companion;
           }
         })
       }),
@@ -1130,84 +859,14 @@ var pixi = function (Kotlin) {
             return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.a, other.a) && Kotlin.equals(this.b, other.b) && Kotlin.equals(this.c, other.c) && Kotlin.equals(this.d, other.d) && Kotlin.equals(this.tx, other.tx) && Kotlin.equals(this.ty, other.ty)))));
           }
         }),
-        ObservablePoint: Kotlin.createClass(function () {
-          return [_.pixi.math.Point];
-        }, function ObservablePoint(cb, x, y) {
-          if (x === void 0)
-            x = 0.0;
-          if (y === void 0)
-            y = 0.0;
-          ObservablePoint.baseInitializer.call(this, x, y);
-          this.cb = cb;
-        }, /** @lends _.pixi.math.ObservablePoint.prototype */ {
-          x: {
-            get: function () {
-              return Kotlin.callGetter(this, _.pixi.math.Point, 'x');
-            },
-            set: function (value) {
-              if (Kotlin.callGetter(this, _.pixi.math.Point, 'x') !== value) {
-                Kotlin.callSetter(this, _.pixi.math.Point, 'x', value);
-                this.cb.invalidate();
-              }
-            }
-          },
-          y: {
-            get: function () {
-              return Kotlin.callGetter(this, _.pixi.math.Point, 'y');
-            },
-            set: function (value) {
-              if (Kotlin.callGetter(this, _.pixi.math.Point, 'y') !== value) {
-                Kotlin.callSetter(this, _.pixi.math.Point, 'y', value);
-                this.cb.invalidate();
-              }
-            }
-          },
-          setAll_mx4ult$: function (v) {
-            if (Kotlin.callGetter(this, _.pixi.math.Point, 'x') !== v || Kotlin.callGetter(this, _.pixi.math.Point, 'y') !== v) {
-              Kotlin.callSetter(this, _.pixi.math.Point, 'x', v);
-              Kotlin.callSetter(this, _.pixi.math.Point, 'y', v);
-              this.cb.invalidate();
-            }
-          },
-          set_dleff0$: function (x, y) {
-            if (Kotlin.callGetter(this, _.pixi.math.Point, 'x') !== x || Kotlin.callGetter(this, _.pixi.math.Point, 'y') !== y) {
-              Kotlin.callSetter(this, _.pixi.math.Point, 'x', x);
-              Kotlin.callSetter(this, _.pixi.math.Point, 'y', y);
-              this.cb.invalidate();
-            }
-          },
-          copy_i97z8y$: function (p) {
-            if (Kotlin.callGetter(this, _.pixi.math.Point, 'x') !== p.x || Kotlin.callGetter(this, _.pixi.math.Point, 'y') !== p.y) {
-              Kotlin.callSetter(this, _.pixi.math.Point, 'x', p.x);
-              Kotlin.callSetter(this, _.pixi.math.Point, 'y', p.y);
-              this.cb.invalidate();
-            }
-          }
-        }),
         Point: Kotlin.createClass(null, function Point(x, y) {
           if (x === void 0)
             x = 0.0;
           if (y === void 0)
             y = 0.0;
-          this.$x_gtnbs$ = x;
-          this.$y_gtnbt$ = y;
+          this.x = x;
+          this.y = y;
         }, /** @lends _.pixi.math.Point.prototype */ {
-          x: {
-            get: function () {
-              return this.$x_gtnbs$;
-            },
-            set: function (x) {
-              this.$x_gtnbs$ = x;
-            }
-          },
-          y: {
-            get: function () {
-              return this.$y_gtnbt$;
-            },
-            set: function (y) {
-              this.$y_gtnbt$ = y;
-            }
-          },
           setAll_mx4ult$: function (v) {
             this.x = v;
             this.y = v;
@@ -1255,7 +914,470 @@ var pixi = function (Kotlin) {
             _.pixi.math.Rectangle.Companion;
           }
         }),
+        Transform: Kotlin.createClass(null, function Transform() {
+          this.worldTransform = new _.pixi.math.Matrix();
+          this.localTransform = new _.pixi.math.Matrix();
+          this._worldID = 0;
+          this._parentID = -1;
+          this._localID = 0;
+          this._currentLocalID = 0;
+          this.position = new _.pixi.math.Point();
+          this.scale = new _.pixi.math.Point(1.0, 1.0);
+          this.pivot = new _.pixi.math.Point();
+          this.skew = new _.pixi.math.Point();
+          this._rotation_og23rt$ = 0.0;
+          this._sr_ataiiu$ = 0.0;
+          this._cr_ataiwm$ = 1.0;
+          this._cy_ataiwf$ = 1.0;
+          this._sy_ataiin$ = 0.0;
+          this._nsx_jxi82g$ = 0.0;
+          this._cx_ataiwg$ = 1.0;
+        }, /** @lends _.pixi.math.Transform.prototype */ {
+          invalidateParent: function () {
+            this._parentID = -1;
+          },
+          rotation_bd091a$: {
+            get: function () {
+              return this._rotation_og23rt$;
+            },
+            set: function (value) {
+              this._rotation_og23rt$ = value;
+              this._sr_ataiiu$ = Math.sin(value);
+              this._cr_ataiwm$ = Math.cos(value);
+            }
+          },
+          updateSkew: function () {
+            this._cy_ataiwf$ = Math.cos(this.skew.y);
+            this._sy_ataiin$ = Math.sin(this.skew.y);
+            this._nsx_jxi82g$ = Math.sin(this.skew.x);
+            this._cx_ataiwg$ = Math.cos(this.skew.x);
+            this._localID++;
+          },
+          updateLocalTransform: function () {
+            var lt = this.localTransform;
+            var a = this._cr_ataiwm$ * this.scale.x;
+            var b = this._sr_ataiiu$ * this.scale.x;
+            var c = -this._sr_ataiiu$ * this.scale.y;
+            var d = this._cr_ataiwm$ * this.scale.y;
+            lt.a = this._cy_ataiwf$ * a + this._sy_ataiin$ * c;
+            lt.b = this._cy_ataiwf$ * b + this._sy_ataiin$ * d;
+            lt.c = this._nsx_jxi82g$ * a + this._cx_ataiwg$ * c;
+            lt.d = this._nsx_jxi82g$ * b + this._cx_ataiwg$ * d;
+            lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
+            lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
+            this._parentID = -1;
+          },
+          updateTransform_egoeju$: function (parentTransform) {
+            var pt = parentTransform.worldTransform;
+            var wt = this.worldTransform;
+            var lt = this.localTransform;
+            var a = this._cr_ataiwm$ * this.scale.x;
+            var b = this._sr_ataiiu$ * this.scale.x;
+            var c = -this._sr_ataiiu$ * this.scale.y;
+            var d = this._cr_ataiwm$ * this.scale.y;
+            lt.a = this._cy_ataiwf$ * a + this._sy_ataiin$ * c;
+            lt.b = this._cy_ataiwf$ * b + this._sy_ataiin$ * d;
+            lt.c = this._nsx_jxi82g$ * a + this._cx_ataiwg$ * c;
+            lt.d = this._nsx_jxi82g$ * b + this._cx_ataiwg$ * d;
+            lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
+            lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
+            wt.a = lt.a * pt.a + lt.b * pt.c;
+            wt.b = lt.a * pt.b + lt.b * pt.d;
+            wt.c = lt.c * pt.a + lt.d * pt.c;
+            wt.d = lt.c * pt.b + lt.d * pt.d;
+            wt.tx = lt.tx * pt.a + lt.ty * pt.c + pt.tx;
+            wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
+            this._parentID = parentTransform._worldID;
+          }
+        }, /** @lends _.pixi.math.Transform */ {
+          Companion: Kotlin.createObject(null, function Companion() {
+            _.pixi.math.Transform.Companion.IDENTITY = new _.pixi.math.Transform();
+          }),
+          object_initializer$: function () {
+            _.pixi.math.Transform.Companion;
+          }
+        }),
         Versionable: Kotlin.createTrait(null)
+      }),
+      observable: Kotlin.definePackage(null, /** @lends _.pixi.observable */ {
+        ObservablePoint: Kotlin.createClass(function () {
+          return [_.pixi.observable.Point];
+        }, function ObservablePoint(cb, x, y) {
+          if (x === void 0)
+            x = 0.0;
+          if (y === void 0)
+            y = 0.0;
+          ObservablePoint.baseInitializer.call(this, x, y);
+          this.cb = cb;
+        }, /** @lends _.pixi.observable.ObservablePoint.prototype */ {
+          x: {
+            get: function () {
+              return Kotlin.callGetter(this, _.pixi.observable.Point, 'x');
+            },
+            set: function (value) {
+              if (Kotlin.callGetter(this, _.pixi.observable.Point, 'x') !== value) {
+                Kotlin.callSetter(this, _.pixi.observable.Point, 'x', value);
+                this.cb.invalidate();
+              }
+            }
+          },
+          y: {
+            get: function () {
+              return Kotlin.callGetter(this, _.pixi.observable.Point, 'y');
+            },
+            set: function (value) {
+              if (Kotlin.callGetter(this, _.pixi.observable.Point, 'y') !== value) {
+                Kotlin.callSetter(this, _.pixi.observable.Point, 'y', value);
+                this.cb.invalidate();
+              }
+            }
+          },
+          setAll_mx4ult$: function (v) {
+            if (Kotlin.callGetter(this, _.pixi.observable.Point, 'x') !== v || Kotlin.callGetter(this, _.pixi.observable.Point, 'y') !== v) {
+              Kotlin.callSetter(this, _.pixi.observable.Point, 'x', v);
+              Kotlin.callSetter(this, _.pixi.observable.Point, 'y', v);
+              this.cb.invalidate();
+            }
+          },
+          set_dleff0$: function (x, y) {
+            if (Kotlin.callGetter(this, _.pixi.observable.Point, 'x') !== x || Kotlin.callGetter(this, _.pixi.observable.Point, 'y') !== y) {
+              Kotlin.callSetter(this, _.pixi.observable.Point, 'x', x);
+              Kotlin.callSetter(this, _.pixi.observable.Point, 'y', y);
+              this.cb.invalidate();
+            }
+          },
+          copy_el3q2x$: function (p) {
+            if (Kotlin.callGetter(this, _.pixi.observable.Point, 'x') !== p.x || Kotlin.callGetter(this, _.pixi.observable.Point, 'y') !== p.y) {
+              Kotlin.callSetter(this, _.pixi.observable.Point, 'x', p.x);
+              Kotlin.callSetter(this, _.pixi.observable.Point, 'y', p.y);
+              this.cb.invalidate();
+            }
+          }
+        }),
+        Point: Kotlin.createClass(null, function Point(x, y) {
+          if (x === void 0)
+            x = 0.0;
+          if (y === void 0)
+            y = 0.0;
+          this.$x_o98fwz$ = x;
+          this.$y_o98fx0$ = y;
+        }, /** @lends _.pixi.observable.Point.prototype */ {
+          x: {
+            get: function () {
+              return this.$x_o98fwz$;
+            },
+            set: function (x) {
+              this.$x_o98fwz$ = x;
+            }
+          },
+          y: {
+            get: function () {
+              return this.$y_o98fx0$;
+            },
+            set: function (y) {
+              this.$y_o98fx0$ = y;
+            }
+          },
+          setAll_mx4ult$: function (v) {
+            this.x = v;
+            this.y = v;
+          },
+          set_dleff0$: function (x, y) {
+            this.x = x;
+            this.y = y;
+          },
+          copy_el3q2x$: function (p) {
+            this.x = p.x;
+            this.y = p.y;
+          },
+          equals_el3q2x$: function (p) {
+            return this.x === p.x && this.y === p.y;
+          },
+          clone: function () {
+            return new _.pixi.observable.Point(this.x, this.y);
+          }
+        }),
+        StaticTransform: Kotlin.createClass(function () {
+          return [_.pixi.math.Versionable, _.pixi.observable.TransformBase];
+        }, function StaticTransform() {
+          this.$worldTransform_9ls3bj$ = new _.pixi.math.Matrix();
+          this.$localTransform_3wpvns$ = new _.pixi.math.Matrix();
+          this.$_worldID_he9c2t$ = 0;
+          this.$_parentID_a4rab7$ = -1;
+          this._localID = 0;
+          this._currentLocalID = 0;
+          this.$position_yglmqo$ = new _.pixi.observable.ObservablePoint(this);
+          this.$scale_jd5wdv$ = new _.pixi.observable.ObservablePoint(this, 1.0, 1.0);
+          this.$pivot_jbms6j$ = new _.pixi.observable.ObservablePoint(this);
+          this.$skew_edf2td$ = new _.pixi.observable.ObservablePoint(this);
+          this._rotation_u8evui$ = 0.0;
+          this._sr_51nkfb$ = 0.0;
+          this._cr_51nk1j$ = 1.0;
+          this._cy_51nk1q$ = 1.0;
+          this._sy_51nkfi$ = 0.0;
+          this._nsx_ed2dmz$ = 0.0;
+          this._cx_51nk1p$ = 1.0;
+        }, /** @lends _.pixi.observable.StaticTransform.prototype */ {
+          invalidate: function () {
+            this._localID++;
+          },
+          invalidateParent: function () {
+            this._parentID = -1;
+          },
+          worldTransform: {
+            get: function () {
+              return this.$worldTransform_9ls3bj$;
+            },
+            set: function (worldTransform) {
+              this.$worldTransform_9ls3bj$ = worldTransform;
+            }
+          },
+          localTransform: {
+            get: function () {
+              return this.$localTransform_3wpvns$;
+            },
+            set: function (localTransform) {
+              this.$localTransform_3wpvns$ = localTransform;
+            }
+          },
+          _worldID: {
+            get: function () {
+              return this.$_worldID_he9c2t$;
+            },
+            set: function (_worldID) {
+              this.$_worldID_he9c2t$ = _worldID;
+            }
+          },
+          _parentID: {
+            get: function () {
+              return this.$_parentID_a4rab7$;
+            },
+            set: function (_parentID) {
+              this.$_parentID_a4rab7$ = _parentID;
+            }
+          },
+          position: {
+            get: function () {
+              return this.$position_yglmqo$;
+            }
+          },
+          scale: {
+            get: function () {
+              return this.$scale_jd5wdv$;
+            }
+          },
+          pivot: {
+            get: function () {
+              return this.$pivot_jbms6j$;
+            }
+          },
+          skew: {
+            get: function () {
+              return this.$skew_edf2td$;
+            }
+          },
+          rotation_njal11$: {
+            get: function () {
+              return this._rotation_u8evui$;
+            },
+            set: function (value) {
+              this._rotation_u8evui$ = value;
+              this._sr_51nkfb$ = Math.sin(value);
+              this._cr_51nk1j$ = Math.cos(value);
+            }
+          },
+          updateSkew: function () {
+            this._cy_51nk1q$ = Math.cos(this.skew.y);
+            this._sy_51nkfi$ = Math.sin(this.skew.y);
+            this._nsx_ed2dmz$ = Math.sin(this.skew.x);
+            this._cx_51nk1p$ = Math.cos(this.skew.x);
+            this._localID++;
+          },
+          updateLocalTransform: function () {
+            var lt = this.localTransform;
+            if (this._localID !== this._currentLocalID) {
+              var a = this._cr_51nk1j$ * this.scale.x;
+              var b = this._sr_51nkfb$ * this.scale.x;
+              var c = -this._sr_51nkfb$ * this.scale.y;
+              var d = this._cr_51nk1j$ * this.scale.y;
+              lt.a = this._cy_51nk1q$ * a + this._sy_51nkfi$ * c;
+              lt.b = this._cy_51nk1q$ * b + this._sy_51nkfi$ * d;
+              lt.c = this._nsx_ed2dmz$ * a + this._cx_51nk1p$ * c;
+              lt.d = this._nsx_ed2dmz$ * b + this._cx_51nk1p$ * d;
+              lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
+              lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
+              this._currentLocalID = this._localID;
+              this._parentID = -1;
+            }
+          },
+          updateTransform_t7rdyi$: function (parentTransform) {
+            var pt = parentTransform.worldTransform;
+            var wt = this.worldTransform;
+            var lt = this.localTransform;
+            if (this._localID !== this._currentLocalID) {
+              var a = this._cr_51nk1j$ * this.scale.x;
+              var b = this._sr_51nkfb$ * this.scale.x;
+              var c = -this._sr_51nkfb$ * this.scale.y;
+              var d = this._cr_51nk1j$ * this.scale.y;
+              lt.a = this._cy_51nk1q$ * a + this._sy_51nkfi$ * c;
+              lt.b = this._cy_51nk1q$ * b + this._sy_51nkfi$ * d;
+              lt.c = this._nsx_ed2dmz$ * a + this._cx_51nk1p$ * c;
+              lt.d = this._nsx_ed2dmz$ * b + this._cx_51nk1p$ * d;
+              lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
+              lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
+              this._currentLocalID = this._localID;
+              this._parentID = -1;
+            }
+            if (this._parentID !== parentTransform._worldID) {
+              wt.a = lt.a * pt.a + lt.b * pt.c;
+              wt.b = lt.a * pt.b + lt.b * pt.d;
+              wt.c = lt.c * pt.a + lt.d * pt.c;
+              wt.d = lt.c * pt.b + lt.d * pt.d;
+              wt.tx = lt.tx * pt.a + lt.ty * pt.c + pt.tx;
+              wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
+              this._parentID = parentTransform._worldID;
+              this._worldID++;
+            }
+          }
+        }),
+        Transform: Kotlin.createClass(function () {
+          return [_.pixi.observable.TransformBase];
+        }, function Transform() {
+          this.$worldTransform_i0qc65$ = new _.pixi.math.Matrix();
+          this.$localTransform_cbo4ie$ = new _.pixi.math.Matrix();
+          this.$_worldID_38jsdl$ = 0;
+          this.$_parentID_ahtmn9$ = -1;
+          this._localID = 0;
+          this._currentLocalID = 0;
+          this.$position_fxpas2$ = new _.pixi.observable.Point();
+          this.$scale_s5wb0f$ = new _.pixi.observable.Point(1.0, 1.0);
+          this.$pivot_s7ff7r$ = new _.pixi.observable.Point();
+          this.$skew_hf750z$ = new _.pixi.observable.Point();
+          this._rotation_ulh86k$ = 0.0;
+          this._sr_t84763$ = 0.0;
+          this._cr_t847jv$ = 1.0;
+          this._cy_t847jo$ = 1.0;
+          this._sy_t8475w$ = 0.0;
+          this._nsx_heuful$ = 0.0;
+          this._cx_t847jp$ = 1.0;
+        }, /** @lends _.pixi.observable.Transform.prototype */ {
+          invalidateParent: function () {
+            this._parentID = -1;
+          },
+          worldTransform: {
+            get: function () {
+              return this.$worldTransform_i0qc65$;
+            },
+            set: function (worldTransform) {
+              this.$worldTransform_i0qc65$ = worldTransform;
+            }
+          },
+          localTransform: {
+            get: function () {
+              return this.$localTransform_cbo4ie$;
+            },
+            set: function (localTransform) {
+              this.$localTransform_cbo4ie$ = localTransform;
+            }
+          },
+          _worldID: {
+            get: function () {
+              return this.$_worldID_38jsdl$;
+            },
+            set: function (_worldID) {
+              this.$_worldID_38jsdl$ = _worldID;
+            }
+          },
+          _parentID: {
+            get: function () {
+              return this.$_parentID_ahtmn9$;
+            },
+            set: function (_parentID) {
+              this.$_parentID_ahtmn9$ = _parentID;
+            }
+          },
+          position: {
+            get: function () {
+              return this.$position_fxpas2$;
+            }
+          },
+          scale: {
+            get: function () {
+              return this.$scale_s5wb0f$;
+            }
+          },
+          pivot: {
+            get: function () {
+              return this.$pivot_s7ff7r$;
+            }
+          },
+          skew: {
+            get: function () {
+              return this.$skew_hf750z$;
+            }
+          },
+          rotation_2whgkn$: {
+            get: function () {
+              return this._rotation_ulh86k$;
+            },
+            set: function (value) {
+              this._rotation_ulh86k$ = value;
+              this._sr_t84763$ = Math.sin(value);
+              this._cr_t847jv$ = Math.cos(value);
+            }
+          },
+          updateSkew: function () {
+            this._cy_t847jo$ = Math.cos(this.skew.y);
+            this._sy_t8475w$ = Math.sin(this.skew.y);
+            this._nsx_heuful$ = Math.sin(this.skew.x);
+            this._cx_t847jp$ = Math.cos(this.skew.x);
+            this._localID++;
+          },
+          updateLocalTransform: function () {
+            var lt = this.localTransform;
+            var a = this._cr_t847jv$ * this.scale.x;
+            var b = this._sr_t84763$ * this.scale.x;
+            var c = -this._sr_t84763$ * this.scale.y;
+            var d = this._cr_t847jv$ * this.scale.y;
+            lt.a = this._cy_t847jo$ * a + this._sy_t8475w$ * c;
+            lt.b = this._cy_t847jo$ * b + this._sy_t8475w$ * d;
+            lt.c = this._nsx_heuful$ * a + this._cx_t847jp$ * c;
+            lt.d = this._nsx_heuful$ * b + this._cx_t847jp$ * d;
+            lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
+            lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
+            this._parentID = -1;
+          },
+          updateTransform_t7rdyi$: function (parentTransform) {
+            var pt = parentTransform.worldTransform;
+            var wt = this.worldTransform;
+            var lt = this.localTransform;
+            var a = this._cr_t847jv$ * this.scale.x;
+            var b = this._sr_t84763$ * this.scale.x;
+            var c = -this._sr_t84763$ * this.scale.y;
+            var d = this._cr_t847jv$ * this.scale.y;
+            lt.a = this._cy_t847jo$ * a + this._sy_t8475w$ * c;
+            lt.b = this._cy_t847jo$ * b + this._sy_t8475w$ * d;
+            lt.c = this._nsx_heuful$ * a + this._cx_t847jp$ * c;
+            lt.d = this._nsx_heuful$ * b + this._cx_t847jp$ * d;
+            lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
+            lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
+            wt.a = lt.a * pt.a + lt.b * pt.c;
+            wt.b = lt.a * pt.b + lt.b * pt.d;
+            wt.c = lt.c * pt.a + lt.d * pt.c;
+            wt.d = lt.c * pt.b + lt.d * pt.d;
+            wt.tx = lt.tx * pt.a + lt.ty * pt.c + pt.tx;
+            wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
+            this._parentID = parentTransform._worldID;
+          }
+        }),
+        TransformBase: Kotlin.createTrait(null, null, /** @lends _.pixi.observable.TransformBase */ {
+          Companion: Kotlin.createObject(null, function Companion() {
+            _.pixi.observable.TransformBase.Companion.IDENTITY = new _.pixi.observable.Transform();
+          }),
+          object_initializer$: function () {
+            _.pixi.observable.TransformBase.Companion;
+          }
+        })
       }),
       renderers: Kotlin.definePackage(null, /** @lends _.pixi.renderers */ {
         ObjectRenderer: Kotlin.createClass(null, function ObjectRenderer(renderer) {
@@ -1711,7 +1833,7 @@ var pixi = function (Kotlin) {
               return this.$type_2txetq$;
             }
           },
-          render_e5kpu6$: function (displayObject, renderTexture, clear, transform, skipUpdateTransform) {
+          render_3fanjz$: function (displayObject, renderTexture, clear, transform, skipUpdateTransform) {
             if (renderTexture === void 0)
               renderTexture = null;
             if (clear === void 0)
@@ -1728,7 +1850,7 @@ var pixi = function (Kotlin) {
             if (!skipUpdateTransform) {
               displayObject.updateTransform();
             }
-            this.bindRenderTexture_5nb7rp$(renderTexture, transform);
+            this.bindRenderTexture_tex0ek$(renderTexture, transform);
             this.currentRenderer.start();
             if (clear != null ? clear : this.clearBeforeRender) {
               this._activeRenderTarget.clear_sgj01r$();
@@ -1752,7 +1874,7 @@ var pixi = function (Kotlin) {
           flush: function () {
             this.setObjectRenderer_ajirfg$(this.emptyRenderer);
           },
-          bindRenderTexture_5nb7rp$: function (renderTexture, transform) {
+          bindRenderTexture_tex0ek$: function (renderTexture, transform) {
             if (transform === void 0)
               transform = null;
             if (renderTexture != null) {
@@ -1988,7 +2110,7 @@ var pixi = function (Kotlin) {
           this.vertexData = new Float32Array(8);
           this._textureID = -1;
           this._transformID = -1;
-          this.anchor = new _.pixi.math.ObservablePoint(this);
+          this.anchor = new _.pixi.observable.Point();
         }, /** @lends _.pixi.sprite.Sprite.prototype */ {
           texture: {
             get: function () {
