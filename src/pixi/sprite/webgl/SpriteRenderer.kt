@@ -216,10 +216,10 @@ class SpriteRenderer(renderer: WebGLRenderer) : ObjectRenderer(renderer), Destro
                 float32View[index + 16] = vertexData.g(7)
             }
 
-            uint32View[index + 2] = uvs[0]
-            uint32View[index + 7] = uvs[1]
-            uint32View[index + 12] = uvs[2]
-            uint32View[index + 17] = uvs[3]
+            uint32View[index + 2] = uvs.g(0)
+            uint32View[index + 7] = uvs.g(1)
+            uint32View[index + 12] = uvs.g(2)
+            uint32View[index + 17] = uvs.g(3)
 
             uint32View[index + 3] = tint
             uint32View[index + 8] = tint
