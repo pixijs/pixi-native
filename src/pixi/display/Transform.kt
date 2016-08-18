@@ -2,35 +2,32 @@ package pixi.display
 
 import pixi.math.Matrix
 import pixi.math.ObservablePoint
+import pixi.math.Point
 import pixi.math.Versionable
 
-class Transform : Versionable {
-    override fun invalidate() {
-        _localID++;
-    }
-
+class Transform : TransformBase {
     fun invalidateParent() {
         _parentID = -1;
     }
 
-    var worldTransform = Matrix();
-    var localTransform = Matrix();
+    override var worldTransform = Matrix();
+    override var localTransform = Matrix();
 
-    var _worldID = 0;
+    override var _worldID = 0;
 
-    var _parentID = -1;
+    override var _parentID = -1;
 
     var _localID = 0;
 
     var _currentLocalID = 0;
 
-    val position = ObservablePoint(this);
+    override val position = Point();
 
-    val scale = ObservablePoint(this, 1f, 1f);
+    override val scale = Point(1f, 1f);
 
-    val pivot = ObservablePoint(this);
+    override val pivot = Point();
 
-    val skew = ObservablePoint(this);
+    override val skew = Point();
 
     private var _rotation: Float = 0f;
     private var _sr: Float = 0f;
@@ -60,63 +57,47 @@ class Transform : Versionable {
 
     fun updateLocalTransform() {
         val lt = localTransform;
-        if (_localID !== _currentLocalID) {
-            val a = _cr * scale.x;
-            val b = _sr * scale.x;
-            val c = -_sr * scale.y;
-            val d = _cr * scale.y;
+        val a = _cr * scale.x;
+        val b = _sr * scale.x;
+        val c = -_sr * scale.y;
+        val d = _cr * scale.y;
 
-            lt.a = _cy * a + _sy * c;
-            lt.b = _cy * b + _sy * d;
-            lt.c = _nsx * a + _cx * c;
-            lt.d = _nsx * b + _cx * d;
+        lt.a = _cy * a + _sy * c;
+        lt.b = _cy * b + _sy * d;
+        lt.c = _nsx * a + _cx * c;
+        lt.d = _nsx * b + _cx * d;
 
-            lt.tx = position.x - (pivot.x * lt.a + pivot.y * lt.c);
-            lt.ty = position.y - (pivot.x * lt.b + pivot.y * lt.d);
-            _currentLocalID = _localID;
+        lt.tx = position.x - (pivot.x * lt.a + pivot.y * lt.c);
+        lt.ty = position.y - (pivot.x * lt.b + pivot.y * lt.d);
 
-            _parentID = -1;
-        }
+        _parentID = -1;
     }
 
-    fun updateTransform(parentTransform: Transform) {
+    override fun updateTransform(parentTransform: TransformBase) {
         val pt = parentTransform.worldTransform;
         val wt = worldTransform;
         val lt = localTransform;
 
-        if (_localID !== _currentLocalID) {
-            val a = _cr * scale.x;
-            val b = _sr * scale.x;
-            val c = -_sr * scale.y;
-            val d = _cr * scale.y;
+        val a = _cr * scale.x;
+        val b = _sr * scale.x;
+        val c = -_sr * scale.y;
+        val d = _cr * scale.y;
 
-            lt.a = _cy * a + _sy * c;
-            lt.b = _cy * b + _sy * d;
-            lt.c = _nsx * a + _cx * c;
-            lt.d = _nsx * b + _cx * d;
+        lt.a = _cy * a + _sy * c;
+        lt.b = _cy * b + _sy * d;
+        lt.c = _nsx * a + _cx * c;
+        lt.d = _nsx * b + _cx * d;
 
-            lt.tx = position.x - (pivot.x * lt.a + pivot.y * lt.c);
-            lt.ty = position.y - (pivot.x * lt.b + pivot.y * lt.d);
-            _currentLocalID = _localID;
+        lt.tx = position.x - (pivot.x * lt.a + pivot.y * lt.c);
+        lt.ty = position.y - (pivot.x * lt.b + pivot.y * lt.d);
 
-            _parentID = -1;
-        }
+        wt.a = lt.a * pt.a + lt.b * pt.c;
+        wt.b = lt.a * pt.b + lt.b * pt.d;
+        wt.c = lt.c * pt.a + lt.d * pt.c;
+        wt.d = lt.c * pt.b + lt.d * pt.d;
+        wt.tx = lt.tx * pt.a + lt.ty * pt.c + pt.tx;
+        wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
 
-        if (_parentID !== parentTransform._worldID) {
-            wt.a = lt.a * pt.a + lt.b * pt.c;
-            wt.b = lt.a * pt.b + lt.b * pt.d;
-            wt.c = lt.c * pt.a + lt.d * pt.c;
-            wt.d = lt.c * pt.b + lt.d * pt.d;
-            wt.tx = lt.tx * pt.a + lt.ty * pt.c + pt.tx;
-            wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
-
-            _parentID = parentTransform._worldID;
-
-            _worldID++;
-        }
-    };
-
-    companion object {
-        val IDENTITY = Transform();
+        _parentID = parentTransform._worldID;
     }
 }

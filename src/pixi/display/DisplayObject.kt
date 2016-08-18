@@ -6,7 +6,7 @@ import pixi.math.Point
 import pixi.renderers.WebGLRenderer
 
 open class DisplayObject {
-    var transform = Transform()
+    var transform: TransformBase = Transform()
 
     open val children: MutableList<DisplayObject>?
         get() = null
@@ -90,7 +90,7 @@ open class DisplayObject {
     open fun objectUpdateTransform() {
         val _parent = parent
 
-        transform.updateTransform(_parent?.transform ?: Transform.IDENTITY)
+        transform.updateTransform(_parent?.transform ?: TransformBase.IDENTITY)
 
         if (_parent != null) {
             worldMulColor.copy(this.mulColor)
