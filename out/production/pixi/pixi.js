@@ -643,7 +643,7 @@ var pixi = function (Kotlin) {
           objectUpdateTransform: function () {
             var tmp$0;
             var _parent = this.parent;
-            this.transform.updateTransform_ahtr0$((tmp$0 = _parent != null ? _parent.transform : null) != null ? tmp$0 : _.pixi.display.Transform.Companion.IDENTITY);
+            this.transform.updateTransform_th4r7x$((tmp$0 = _parent != null ? _parent.transform : null) != null ? tmp$0 : _.pixi.display.TransformBase.Companion.IDENTITY);
             if (_parent != null) {
               this.worldMulColor.copy_sgj01r$(this.mulColor);
               this.worldMulColor.mul_sgj01r$(_parent.worldMulColor);
@@ -658,19 +658,162 @@ var pixi = function (Kotlin) {
             this.objectRenderWebGL_75dbqe$(renderer);
           }
         }),
-        Transform: Kotlin.createClass(function () {
-          return [_.pixi.math.Versionable];
-        }, function Transform() {
-          this.worldTransform = new _.pixi.math.Matrix();
-          this.localTransform = new _.pixi.math.Matrix();
-          this._worldID = 0;
-          this._parentID = -1;
+        StaticTransform: Kotlin.createClass(function () {
+          return [_.pixi.math.Versionable, _.pixi.display.TransformBase];
+        }, function StaticTransform() {
+          this.$worldTransform_iw9xi2$ = new _.pixi.math.Matrix();
+          this.$localTransform_olc55t$ = new _.pixi.math.Matrix();
+          this.$_worldID_repe$ = 0;
+          this.$_parentID_i6i37o$ = -1;
           this._localID = 0;
           this._currentLocalID = 0;
-          this.position = new _.pixi.math.ObservablePoint(this);
-          this.scale = new _.pixi.math.ObservablePoint(this, 1.0, 1.0);
-          this.pivot = new _.pixi.math.ObservablePoint(this);
-          this.skew = new _.pixi.math.ObservablePoint(this);
+          this.$position_j5hog9$ = new _.pixi.math.ObservablePoint(this);
+          this.$scale_u13onq$ = new _.pixi.math.ObservablePoint(this, 1.0, 1.0);
+          this.$pivot_u2msv2$ = new _.pixi.math.ObservablePoint(this);
+          this.$skew_7ubyfq$ = new _.pixi.math.ObservablePoint(this);
+          this._rotation_1x5ibn$ = 0.0;
+          this._sr_bpk0yq$ = 0.0;
+          this._cr_bpk1ci$ = 1.0;
+          this._cy_bpk1cb$ = 1.0;
+          this._sy_bpk0yj$ = 0.0;
+          this._nsx_7uonm4$ = 0.0;
+          this._cx_bpk1cc$ = 1.0;
+        }, /** @lends _.pixi.display.StaticTransform.prototype */ {
+          invalidate: function () {
+            this._localID++;
+          },
+          invalidateParent: function () {
+            this._parentID = -1;
+          },
+          worldTransform: {
+            get: function () {
+              return this.$worldTransform_iw9xi2$;
+            },
+            set: function (worldTransform) {
+              this.$worldTransform_iw9xi2$ = worldTransform;
+            }
+          },
+          localTransform: {
+            get: function () {
+              return this.$localTransform_olc55t$;
+            },
+            set: function (localTransform) {
+              this.$localTransform_olc55t$ = localTransform;
+            }
+          },
+          _worldID: {
+            get: function () {
+              return this.$_worldID_repe$;
+            },
+            set: function (_worldID) {
+              this.$_worldID_repe$ = _worldID;
+            }
+          },
+          _parentID: {
+            get: function () {
+              return this.$_parentID_i6i37o$;
+            },
+            set: function (_parentID) {
+              this.$_parentID_i6i37o$ = _parentID;
+            }
+          },
+          position: {
+            get: function () {
+              return this.$position_j5hog9$;
+            }
+          },
+          scale: {
+            get: function () {
+              return this.$scale_u13onq$;
+            }
+          },
+          pivot: {
+            get: function () {
+              return this.$pivot_u2msv2$;
+            }
+          },
+          skew: {
+            get: function () {
+              return this.$skew_7ubyfq$;
+            }
+          },
+          rotation_649u8u$: {
+            get: function () {
+              return this._rotation_1x5ibn$;
+            },
+            set: function (value) {
+              this._rotation_1x5ibn$ = value;
+              this._sr_bpk0yq$ = Math.sin(value);
+              this._cr_bpk1ci$ = Math.cos(value);
+            }
+          },
+          updateSkew: function () {
+            this._cy_bpk1cb$ = Math.cos(this.skew.y);
+            this._sy_bpk0yj$ = Math.sin(this.skew.y);
+            this._nsx_7uonm4$ = Math.sin(this.skew.x);
+            this._cx_bpk1cc$ = Math.cos(this.skew.x);
+            this._localID++;
+          },
+          updateLocalTransform: function () {
+            var lt = this.localTransform;
+            if (this._localID !== this._currentLocalID) {
+              var a = this._cr_bpk1ci$ * this.scale.x;
+              var b = this._sr_bpk0yq$ * this.scale.x;
+              var c = -this._sr_bpk0yq$ * this.scale.y;
+              var d = this._cr_bpk1ci$ * this.scale.y;
+              lt.a = this._cy_bpk1cb$ * a + this._sy_bpk0yj$ * c;
+              lt.b = this._cy_bpk1cb$ * b + this._sy_bpk0yj$ * d;
+              lt.c = this._nsx_7uonm4$ * a + this._cx_bpk1cc$ * c;
+              lt.d = this._nsx_7uonm4$ * b + this._cx_bpk1cc$ * d;
+              lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
+              lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
+              this._currentLocalID = this._localID;
+              this._parentID = -1;
+            }
+          },
+          updateTransform_th4r7x$: function (parentTransform) {
+            var pt = parentTransform.worldTransform;
+            var wt = this.worldTransform;
+            var lt = this.localTransform;
+            if (this._localID !== this._currentLocalID) {
+              var a = this._cr_bpk1ci$ * this.scale.x;
+              var b = this._sr_bpk0yq$ * this.scale.x;
+              var c = -this._sr_bpk0yq$ * this.scale.y;
+              var d = this._cr_bpk1ci$ * this.scale.y;
+              lt.a = this._cy_bpk1cb$ * a + this._sy_bpk0yj$ * c;
+              lt.b = this._cy_bpk1cb$ * b + this._sy_bpk0yj$ * d;
+              lt.c = this._nsx_7uonm4$ * a + this._cx_bpk1cc$ * c;
+              lt.d = this._nsx_7uonm4$ * b + this._cx_bpk1cc$ * d;
+              lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
+              lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
+              this._currentLocalID = this._localID;
+              this._parentID = -1;
+            }
+            if (this._parentID !== parentTransform._worldID) {
+              wt.a = lt.a * pt.a + lt.b * pt.c;
+              wt.b = lt.a * pt.b + lt.b * pt.d;
+              wt.c = lt.c * pt.a + lt.d * pt.c;
+              wt.d = lt.c * pt.b + lt.d * pt.d;
+              wt.tx = lt.tx * pt.a + lt.ty * pt.c + pt.tx;
+              wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
+              this._parentID = parentTransform._worldID;
+              this._worldID++;
+            }
+          }
+        }),
+        Transform: Kotlin.createClass(function () {
+          return [_.pixi.display.TransformBase];
+        }, function Transform() {
+          this.$worldTransform_zfr2yc$ = new _.pixi.math.Matrix();
+          this.$localTransform_tqoval$ = new _.pixi.math.Matrix();
+          this.$_worldID_qovsjk$ = 0;
+          this.$_parentID_r9181a$ = -1;
+          this._localID = 0;
+          this._currentLocalID = 0;
+          this.$position_7impdx$ = new _.pixi.math.Point();
+          this.$scale_o79n48$ = new _.pixi.math.Point(1.0, 1.0);
+          this.$pivot_o8srbk$ = new _.pixi.math.Point();
+          this.$skew_9y1tt0$ = new _.pixi.math.Point();
           this._rotation_nof8ej$ = 0.0;
           this._sr_tgry0c$ = 0.0;
           this._cr_tgrxmk$ = 1.0;
@@ -679,11 +822,60 @@ var pixi = function (Kotlin) {
           this._nsx_9yeize$ = 0.0;
           this._cx_tgrxmq$ = 1.0;
         }, /** @lends _.pixi.display.Transform.prototype */ {
-          invalidate: function () {
-            this._localID++;
-          },
           invalidateParent: function () {
             this._parentID = -1;
+          },
+          worldTransform: {
+            get: function () {
+              return this.$worldTransform_zfr2yc$;
+            },
+            set: function (worldTransform) {
+              this.$worldTransform_zfr2yc$ = worldTransform;
+            }
+          },
+          localTransform: {
+            get: function () {
+              return this.$localTransform_tqoval$;
+            },
+            set: function (localTransform) {
+              this.$localTransform_tqoval$ = localTransform;
+            }
+          },
+          _worldID: {
+            get: function () {
+              return this.$_worldID_qovsjk$;
+            },
+            set: function (_worldID) {
+              this.$_worldID_qovsjk$ = _worldID;
+            }
+          },
+          _parentID: {
+            get: function () {
+              return this.$_parentID_r9181a$;
+            },
+            set: function (_parentID) {
+              this.$_parentID_r9181a$ = _parentID;
+            }
+          },
+          position: {
+            get: function () {
+              return this.$position_7impdx$;
+            }
+          },
+          scale: {
+            get: function () {
+              return this.$scale_o79n48$;
+            }
+          },
+          pivot: {
+            get: function () {
+              return this.$pivot_o8srbk$;
+            }
+          },
+          skew: {
+            get: function () {
+              return this.$skew_9y1tt0$;
+            }
           },
           rotation_kjujlc$: {
             get: function () {
@@ -704,56 +896,47 @@ var pixi = function (Kotlin) {
           },
           updateLocalTransform: function () {
             var lt = this.localTransform;
-            if (this._localID !== this._currentLocalID) {
-              var a = this._cr_tgrxmk$ * this.scale.x;
-              var b = this._sr_tgry0c$ * this.scale.x;
-              var c = -this._sr_tgry0c$ * this.scale.y;
-              var d = this._cr_tgrxmk$ * this.scale.y;
-              lt.a = this._cy_tgrxmr$ * a + this._sy_tgry0j$ * c;
-              lt.b = this._cy_tgrxmr$ * b + this._sy_tgry0j$ * d;
-              lt.c = this._nsx_9yeize$ * a + this._cx_tgrxmq$ * c;
-              lt.d = this._nsx_9yeize$ * b + this._cx_tgrxmq$ * d;
-              lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
-              lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
-              this._currentLocalID = this._localID;
-              this._parentID = -1;
-            }
+            var a = this._cr_tgrxmk$ * this.scale.x;
+            var b = this._sr_tgry0c$ * this.scale.x;
+            var c = -this._sr_tgry0c$ * this.scale.y;
+            var d = this._cr_tgrxmk$ * this.scale.y;
+            lt.a = this._cy_tgrxmr$ * a + this._sy_tgry0j$ * c;
+            lt.b = this._cy_tgrxmr$ * b + this._sy_tgry0j$ * d;
+            lt.c = this._nsx_9yeize$ * a + this._cx_tgrxmq$ * c;
+            lt.d = this._nsx_9yeize$ * b + this._cx_tgrxmq$ * d;
+            lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
+            lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
+            this._parentID = -1;
           },
-          updateTransform_ahtr0$: function (parentTransform) {
+          updateTransform_th4r7x$: function (parentTransform) {
             var pt = parentTransform.worldTransform;
             var wt = this.worldTransform;
             var lt = this.localTransform;
-            if (this._localID !== this._currentLocalID) {
-              var a = this._cr_tgrxmk$ * this.scale.x;
-              var b = this._sr_tgry0c$ * this.scale.x;
-              var c = -this._sr_tgry0c$ * this.scale.y;
-              var d = this._cr_tgrxmk$ * this.scale.y;
-              lt.a = this._cy_tgrxmr$ * a + this._sy_tgry0j$ * c;
-              lt.b = this._cy_tgrxmr$ * b + this._sy_tgry0j$ * d;
-              lt.c = this._nsx_9yeize$ * a + this._cx_tgrxmq$ * c;
-              lt.d = this._nsx_9yeize$ * b + this._cx_tgrxmq$ * d;
-              lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
-              lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
-              this._currentLocalID = this._localID;
-              this._parentID = -1;
-            }
-            if (this._parentID !== parentTransform._worldID) {
-              wt.a = lt.a * pt.a + lt.b * pt.c;
-              wt.b = lt.a * pt.b + lt.b * pt.d;
-              wt.c = lt.c * pt.a + lt.d * pt.c;
-              wt.d = lt.c * pt.b + lt.d * pt.d;
-              wt.tx = lt.tx * pt.a + lt.ty * pt.c + pt.tx;
-              wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
-              this._parentID = parentTransform._worldID;
-              this._worldID++;
-            }
+            var a = this._cr_tgrxmk$ * this.scale.x;
+            var b = this._sr_tgry0c$ * this.scale.x;
+            var c = -this._sr_tgry0c$ * this.scale.y;
+            var d = this._cr_tgrxmk$ * this.scale.y;
+            lt.a = this._cy_tgrxmr$ * a + this._sy_tgry0j$ * c;
+            lt.b = this._cy_tgrxmr$ * b + this._sy_tgry0j$ * d;
+            lt.c = this._nsx_9yeize$ * a + this._cx_tgrxmq$ * c;
+            lt.d = this._nsx_9yeize$ * b + this._cx_tgrxmq$ * d;
+            lt.tx = this.position.x - (this.pivot.x * lt.a + this.pivot.y * lt.c);
+            lt.ty = this.position.y - (this.pivot.x * lt.b + this.pivot.y * lt.d);
+            wt.a = lt.a * pt.a + lt.b * pt.c;
+            wt.b = lt.a * pt.b + lt.b * pt.d;
+            wt.c = lt.c * pt.a + lt.d * pt.c;
+            wt.d = lt.c * pt.b + lt.d * pt.d;
+            wt.tx = lt.tx * pt.a + lt.ty * pt.c + pt.tx;
+            wt.ty = lt.tx * pt.b + lt.ty * pt.d + pt.ty;
+            this._parentID = parentTransform._worldID;
           }
-        }, /** @lends _.pixi.display.Transform */ {
+        }),
+        TransformBase: Kotlin.createTrait(null, null, /** @lends _.pixi.display.TransformBase */ {
           Companion: Kotlin.createObject(null, function Companion() {
-            _.pixi.display.Transform.Companion.IDENTITY = new _.pixi.display.Transform();
+            _.pixi.display.TransformBase.Companion.IDENTITY = new _.pixi.display.Transform();
           }),
           object_initializer$: function () {
-            _.pixi.display.Transform.Companion;
+            _.pixi.display.TransformBase.Companion;
           }
         })
       }),
