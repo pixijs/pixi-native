@@ -8,6 +8,7 @@ import pixi.gl.GLTexture
 import pixi.math.Frame
 import pixi.math.Matrix
 import pixi.math.Rectangle
+import pixi.utils.g
 import pixi.utils.get
 import org.khronos.webgl.WebGLRenderingContext as GL;
 
@@ -130,7 +131,7 @@ class RenderTarget(val gl: GL, var width: Int, var height: Int,
 
     fun clear(clearColor: Color? = null) {
         val rgba = (clearColor ?: this.clearColor).rgba
-        frameBuffer?.clear(rgba[0], rgba[1], rgba[2], rgba[3])
+        frameBuffer?.clear(rgba.g(0), rgba.g(1), rgba.g(2), rgba.g(3))
     }
 
     override var isDestroyed = false;

@@ -11,6 +11,7 @@ import pixi.renderers.Shader
 import pixi.renderers.WebGLRenderer
 import pixi.textures.BaseTexture
 import pixi.utils.checkMaxIfStatementsInShader
+import pixi.utils.g
 import pixi.utils.get
 import pixi.utils.set
 import org.khronos.webgl.WebGLRenderingContext as GL
@@ -182,37 +183,37 @@ class SpriteRenderer(renderer: WebGLRenderer) : ObjectRenderer(renderer), Destro
                 val resolution = this.renderer.resolution
 
                 //xy
-                float32View[index] = Math.floor(vertexData[0] * resolution) / resolution
-                float32View[index + 1] = Math.floor(vertexData[1] * resolution) / resolution
+                float32View[index] = Math.floor(vertexData.g(0) * resolution) / resolution
+                float32View[index + 1] = Math.floor(vertexData.g(1) * resolution) / resolution
 
                 // xy
-                float32View[index + 5] = Math.floor(vertexData[2] * resolution) / resolution
-                float32View[index + 6] = Math.floor(vertexData[3] * resolution) / resolution
+                float32View[index + 5] = Math.floor(vertexData.g(2) * resolution) / resolution
+                float32View[index + 6] = Math.floor(vertexData.g(3) * resolution) / resolution
 
                 // xy
-                float32View[index + 10] = Math.floor(vertexData[4] * resolution) / resolution
-                float32View[index + 11] = Math.floor(vertexData[5] * resolution) / resolution
+                float32View[index + 10] = Math.floor(vertexData.g(4) * resolution) / resolution
+                float32View[index + 11] = Math.floor(vertexData.g(5) * resolution) / resolution
 
                 // xy
-                float32View[index + 15] = Math.floor(vertexData[6] * resolution) / resolution
-                float32View[index + 16] = Math.floor(vertexData[7] * resolution) / resolution
+                float32View[index + 15] = Math.floor(vertexData.g(6) * resolution) / resolution
+                float32View[index + 16] = Math.floor(vertexData.g(7) * resolution) / resolution
 
             } else {
                 //xy
-                float32View[index] = vertexData[0]
-                float32View[index + 1] = vertexData[1]
+                float32View[index] = vertexData.g(0)
+                float32View[index + 1] = vertexData.g(1)
 
                 // xy
-                float32View[index + 5] = vertexData[2]
-                float32View[index + 6] = vertexData[3]
+                float32View[index + 5] = vertexData.g(2)
+                float32View[index + 6] = vertexData.g(3)
 
                 // xy
-                float32View[index + 10] = vertexData[4]
-                float32View[index + 11] = vertexData[5]
+                float32View[index + 10] = vertexData.g(4)
+                float32View[index + 11] = vertexData.g(5)
 
                 // xy
-                float32View[index + 15] = vertexData[6]
-                float32View[index + 16] = vertexData[7]
+                float32View[index + 15] = vertexData.g(6)
+                float32View[index + 16] = vertexData.g(7)
             }
 
             uint32View[index + 2] = uvs[0]
@@ -248,7 +249,11 @@ class SpriteRenderer(renderer: WebGLRenderer) : ObjectRenderer(renderer), Destro
         for (i in 0..groupCount - 1) {
             val group = groups[i]
             val groupTextureCount = group.textureCount
-            val shader = shaders[groupTextureCount - 1] ?: generateMultiTextureShader(renderer, groupTextureCount)
+            var shader = shaders[groupTextureCount - 1]
+            if (shader == null) {
+                shader = generateMultiTextureShader(renderer, groupTextureCount)
+                shaders[groupTextureCount - 1] = shader
+            }
 
             renderer.bindShader(shader)
             for (j in 0..groupTextureCount - 1) {
