@@ -63,13 +63,11 @@ var pixi = function (Kotlin) {
         _.hello.adding = false;
       },
       init: function () {
-        var tmp$0;
         _.hello.textures = Kotlin.arrayFromFun(_.hello.MAX_TEXTURES, _.hello.init$f);
         $(_.hello.renderer.view).mousedown(_.hello.init$f_0).mouseup(_.hello.init$f_1);
         document.addEventListener('touchstart', _.hello.init$f_2, true);
         document.addEventListener('touchend', _.hello.init$f_3, true);
-        tmp$0 = 99;
-        for (var i = 0; i <= tmp$0; i++) {
+        for (var i = 0; i <= 99; i++) {
           _.hello.addBunny();
         }
         _.hello.counter.innerHTML = _.hello.count.toString() + ' BUNNIES';
@@ -97,11 +95,10 @@ var pixi = function (Kotlin) {
         _.hello.count++;
       },
       update: function () {
-        var tmp$0, tmp$1, tmp$2, tmp$3;
+        var tmp$1, tmp$2, tmp$3;
         if (_.hello.adding) {
           if (_.hello.count < 100000) {
-            tmp$0 = 99;
-            for (var i = 0; i <= tmp$0; i++) {
+            for (var i = 0; i <= 99; i++) {
               _.hello.addBunny();
             }
           }
@@ -157,12 +154,12 @@ var pixi = function (Kotlin) {
     }, /** @lends _.pixi */ {
       BlendMode: Kotlin.createEnumClass(function () {
         return [Kotlin.Enum];
-      }, function $fun(bcode, canvasName, glFirstMul, glSecondMul) {
+      }, function BlendMode(bcode, canvasName, glFirstMul, glSecondMul) {
         if (glFirstMul === void 0)
           glFirstMul = WebGLRenderingContext.ONE;
         if (glSecondMul === void 0)
           glSecondMul = WebGLRenderingContext.ONE_MINUS_SRC_ALPHA;
-        $fun.baseInitializer.call(this);
+        BlendMode.baseInitializer.call(this);
         this.bcode = bcode;
         this.canvasName = canvasName;
         this.glFirstMul = glFirstMul;
@@ -222,7 +219,7 @@ var pixi = function (Kotlin) {
           }
         };
       }, null, /** @lends _.pixi.BlendMode */ {
-        Companion: Kotlin.createObject(null, function () {
+        Companion: Kotlin.createObject(null, function Companion() {
           _.pixi.BlendMode.Companion.values_sxgrqa$ = _.pixi.BlendMode.values();
         }, /** @lends _.pixi.BlendMode.Companion.prototype */ {
           byCode_za3lpa$: function (code) {
@@ -233,7 +230,7 @@ var pixi = function (Kotlin) {
           _.pixi.BlendMode.Companion;
         }
       }),
-      Color: Kotlin.createClass(null, function () {
+      Color: Kotlin.createClass(null, function Color() {
         this._rgba_izyxo$ = new Float32Array(Kotlin.kotlin.collections.toTypedArray_rjqrz0$([1.0, 1.0, 1.0, 1.0]));
         this._rgbInt_9yflym$ = -1;
         this._alpha_gm83iq$ = 1.0;
@@ -259,8 +256,8 @@ var pixi = function (Kotlin) {
             return this._rgba_izyxo$;
           },
           set: function (value) {
-            this._rgbInt_9yflym$ = Math.floor(_.pixi.utils.get_25qnj7$(value, 0) * 255.0) << 16 | Math.floor(_.pixi.utils.get_25qnj7$(value, 1) * 255.0) << 8 | Math.floor(_.pixi.utils.get_25qnj7$(value, 2) * 255.0);
-            this._alpha_gm83iq$ = _.pixi.utils.get_25qnj7$(value, 3);
+            this._rgbInt_9yflym$ = Math.floor(value[0] * 255.0) << 16 | Math.floor(value[1] * 255.0) << 8 | Math.floor(value[2] * 255.0);
+            this._alpha_gm83iq$ = value[3];
           }
         },
         alpha: {
@@ -274,22 +271,22 @@ var pixi = function (Kotlin) {
         },
         r: {
           get: function () {
-            return _.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 0);
+            return this._rgba_izyxo$[0];
           }
         },
         g: {
           get: function () {
-            return _.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 1);
+            return this._rgba_izyxo$[1];
           }
         },
         b: {
           get: function () {
-            return _.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 1);
+            return this._rgba_izyxo$[1];
           }
         },
         a: {
           get: function () {
-            return _.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 1);
+            return this._rgba_izyxo$[1];
           }
         },
         setVec4_7b5o5w$: function (r, g, b, a) {
@@ -305,10 +302,8 @@ var pixi = function (Kotlin) {
             return '#' + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ << 20 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ << 16 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ << 12 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ << 8 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ << 4 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ & 15);
           },
           set: function (value) {
-            var tmp$0;
             this._rgbInt_9yflym$ = 0;
-            tmp$0 = 6;
-            for (var i = 1; i <= tmp$0; i++) {
+            for (var i = 1; i <= 6; i++) {
               if (value.charAt(i) >= '0' && value.charAt(i) <= '9') {
                 this._rgbInt_9yflym$ = this._rgbInt_9yflym$ | value.charAt(i).charCodeAt(0) - '0'.charCodeAt(0) << i * 4;
               }
@@ -323,22 +318,22 @@ var pixi = function (Kotlin) {
           }
         },
         copy_sgj01r$: function (clr) {
-          this._rgba_izyxo$[0] = _.pixi.utils.get_25qnj7$(clr._rgba_izyxo$, 0);
-          this._rgba_izyxo$[1] = _.pixi.utils.get_25qnj7$(clr._rgba_izyxo$, 1);
-          this._rgba_izyxo$[2] = _.pixi.utils.get_25qnj7$(clr._rgba_izyxo$, 2);
-          this._rgba_izyxo$[3] = _.pixi.utils.get_25qnj7$(clr._rgba_izyxo$, 3);
+          this._rgba_izyxo$[0] = clr._rgba_izyxo$[0];
+          this._rgba_izyxo$[1] = clr._rgba_izyxo$[1];
+          this._rgba_izyxo$[2] = clr._rgba_izyxo$[2];
+          this._rgba_izyxo$[3] = clr._rgba_izyxo$[3];
           this._alpha_gm83iq$ = clr._alpha_gm83iq$;
           this._rgbInt_9yflym$ = clr._rgbInt_9yflym$;
         },
         mul_sgj01r$: function (color) {
           if (color._rgbInt_9yflym$ === 16777215 && color._alpha_gm83iq$ === 1.0)
             return;
-          this._rgba_izyxo$[0] = _.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 0) * _.pixi.utils.get_25qnj7$(color._rgba_izyxo$, 0);
-          this._rgba_izyxo$[1] = _.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 1) * _.pixi.utils.get_25qnj7$(color._rgba_izyxo$, 1);
-          this._rgba_izyxo$[2] = _.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 2) * _.pixi.utils.get_25qnj7$(color._rgba_izyxo$, 2);
-          this._rgba_izyxo$[3] = _.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 3) * _.pixi.utils.get_25qnj7$(color._rgba_izyxo$, 3);
-          this._rgbInt_9yflym$ = Math.floor(_.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 0) * 255.0) << 16 | Math.floor(_.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 1) * 255.0) << 8 | Math.floor(_.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 2) * 255.0);
-          this._alpha_gm83iq$ = _.pixi.utils.get_25qnj7$(this._rgba_izyxo$, 3);
+          this._rgba_izyxo$[0] = this._rgba_izyxo$[0] * color._rgba_izyxo$[0];
+          this._rgba_izyxo$[1] = this._rgba_izyxo$[1] * color._rgba_izyxo$[1];
+          this._rgba_izyxo$[2] = this._rgba_izyxo$[2] * color._rgba_izyxo$[2];
+          this._rgba_izyxo$[3] = this._rgba_izyxo$[3] * color._rgba_izyxo$[3];
+          this._rgbInt_9yflym$ = Math.floor(this._rgba_izyxo$[0] * 255.0) << 16 | Math.floor(this._rgba_izyxo$[1] * 255.0) << 8 | Math.floor(this._rgba_izyxo$[2] * 255.0);
+          this._alpha_gm83iq$ = this._rgba_izyxo$[3];
         }
       }),
       Color_init_za3lpa$: function (rgb, $this) {
@@ -371,8 +366,8 @@ var pixi = function (Kotlin) {
       },
       RendererType: Kotlin.createEnumClass(function () {
         return [Kotlin.Enum];
-      }, function $fun(systemName) {
-        $fun.baseInitializer.call(this);
+      }, function RendererType(systemName) {
+        RendererType.baseInitializer.call(this);
         this.systemName = systemName;
       }, function () {
         return {
@@ -389,8 +384,8 @@ var pixi = function (Kotlin) {
       }),
       ScaleMode: Kotlin.createEnumClass(function () {
         return [Kotlin.Enum];
-      }, function $fun() {
-        $fun.baseInitializer.call(this);
+      }, function ScaleMode() {
+        ScaleMode.baseInitializer.call(this);
       }, function () {
         return {
           NEAREST: function () {
@@ -401,7 +396,7 @@ var pixi = function (Kotlin) {
           }
         };
       }, null, /** @lends _.pixi.ScaleMode */ {
-        Companion: Kotlin.createObject(null, function () {
+        Companion: Kotlin.createObject(null, function Companion() {
           _.pixi.ScaleMode.Companion.DEFAULT = _.pixi.ScaleMode.NEAREST;
         }),
         object_initializer$: function () {
@@ -410,8 +405,8 @@ var pixi = function (Kotlin) {
       }),
       Precision: Kotlin.createEnumClass(function () {
         return [Kotlin.Enum];
-      }, function $fun(glsl) {
-        $fun.baseInitializer.call(this);
+      }, function Precision(glsl) {
+        Precision.baseInitializer.call(this);
         this.glsl = glsl;
       }, function () {
         return {
@@ -426,7 +421,7 @@ var pixi = function (Kotlin) {
           }
         };
       }, null, /** @lends _.pixi.Precision */ {
-        Companion: Kotlin.createObject(null, function () {
+        Companion: Kotlin.createObject(null, function Companion() {
           _.pixi.Precision.Companion.DEFAULT = _.pixi.Precision.MEDIUM;
         }),
         object_initializer$: function () {
@@ -435,8 +430,8 @@ var pixi = function (Kotlin) {
       }),
       WrapMode: Kotlin.createEnumClass(function () {
         return [Kotlin.Enum];
-      }, function $fun() {
-        $fun.baseInitializer.call(this);
+      }, function WrapMode() {
+        WrapMode.baseInitializer.call(this);
       }, function () {
         return {
           CLAMP: function () {
@@ -450,7 +445,7 @@ var pixi = function (Kotlin) {
           }
         };
       }, null, /** @lends _.pixi.WrapMode */ {
-        Companion: Kotlin.createObject(null, function () {
+        Companion: Kotlin.createObject(null, function Companion() {
           _.pixi.WrapMode.Companion.DEFAULT = _.pixi.WrapMode.CLAMP;
         }),
         object_initializer$: function () {
@@ -459,8 +454,8 @@ var pixi = function (Kotlin) {
       }),
       GcMode: Kotlin.createEnumClass(function () {
         return [Kotlin.Enum];
-      }, function $fun() {
-        $fun.baseInitializer.call(this);
+      }, function GcMode() {
+        GcMode.baseInitializer.call(this);
       }, function () {
         return {
           MANUAL: function () {
@@ -471,7 +466,7 @@ var pixi = function (Kotlin) {
           }
         };
       }, null, /** @lends _.pixi.GcMode */ {
-        Companion: Kotlin.createObject(null, function () {
+        Companion: Kotlin.createObject(null, function Companion() {
           _.pixi.GcMode.Companion.DEFAULT = _.pixi.GcMode.AUTO;
         }),
         object_initializer$: function () {
@@ -486,8 +481,8 @@ var pixi = function (Kotlin) {
       display: Kotlin.definePackage(null, /** @lends _.pixi.display */ {
         Container: Kotlin.createClass(function () {
           return [_.pixi.display.DisplayObject];
-        }, function $fun() {
-          $fun.baseInitializer.call(this);
+        }, function Container() {
+          Container.baseInitializer.call(this);
           this._children_4nmtgh$ = Kotlin.kotlin.collections.mutableListOf_9mqe4v$([]);
         }, /** @lends _.pixi.display.Container.prototype */ {
           children: {
@@ -547,7 +542,7 @@ var pixi = function (Kotlin) {
             }
           }
         }),
-        DisplayObject: Kotlin.createClass(null, function () {
+        DisplayObject: Kotlin.createClass(null, function DisplayObject() {
           this.transform = new _.pixi.display.Transform();
           this.mulColor = new _.pixi.Color();
           this.worldMulColor = new _.pixi.Color();
@@ -665,7 +660,7 @@ var pixi = function (Kotlin) {
         }),
         Transform: Kotlin.createClass(function () {
           return [_.pixi.math.Versionable];
-        }, function () {
+        }, function Transform() {
           this.worldTransform = new _.pixi.math.Matrix();
           this.localTransform = new _.pixi.math.Matrix();
           this._worldID = 0;
@@ -754,7 +749,7 @@ var pixi = function (Kotlin) {
             }
           }
         }, /** @lends _.pixi.display.Transform */ {
-          Companion: Kotlin.createObject(null, function () {
+          Companion: Kotlin.createObject(null, function Companion() {
             _.pixi.display.Transform.Companion.IDENTITY = new _.pixi.display.Transform();
           }),
           object_initializer$: function () {
@@ -777,7 +772,8 @@ var pixi = function (Kotlin) {
         }
       }),
       math: Kotlin.definePackage(null, /** @lends _.pixi.math */ {
-        BitTwiddle: Kotlin.createObject(null, null, /** @lends _.pixi.math.BitTwiddle.prototype */ {
+        BitTwiddle: Kotlin.createObject(null, function BitTwiddle() {
+        }, /** @lends _.pixi.math.BitTwiddle.prototype */ {
           isPow2_za3lpa$: function (v) {
             return (v & v - 1) === 0 && v !== 0;
           },
@@ -811,7 +807,7 @@ var pixi = function (Kotlin) {
             return r | v >> 1;
           }
         }),
-        Frame: Kotlin.createClass(null, function (x, y, width, height) {
+        Frame: Kotlin.createClass(null, function Frame(x, y, width, height) {
           if (x === void 0)
             x = 0;
           if (y === void 0)
@@ -832,14 +828,14 @@ var pixi = function (Kotlin) {
             this.height = frame.height;
           }
         }, /** @lends _.pixi.math.Frame */ {
-          Companion: Kotlin.createObject(null, function () {
+          Companion: Kotlin.createObject(null, function Companion() {
             _.pixi.math.Frame.Companion.EMPTY = new _.pixi.math.Frame();
           }),
           object_initializer$: function () {
             _.pixi.math.Frame.Companion;
           }
         }),
-        Matrix: Kotlin.createClass(null, function (a, b, c, d, tx, ty) {
+        Matrix: Kotlin.createClass(null, function Matrix(a, b, c, d, tx, ty) {
           if (a === void 0)
             a = 1.0;
           if (b === void 0)
@@ -953,12 +949,12 @@ var pixi = function (Kotlin) {
         }),
         ObservablePoint: Kotlin.createClass(function () {
           return [_.pixi.math.Point];
-        }, function $fun(cb, x, y) {
+        }, function ObservablePoint(cb, x, y) {
           if (x === void 0)
             x = 0.0;
           if (y === void 0)
             y = 0.0;
-          $fun.baseInitializer.call(this, x, y);
+          ObservablePoint.baseInitializer.call(this, x, y);
           this.cb = cb;
         }, /** @lends _.pixi.math.ObservablePoint.prototype */ {
           x: {
@@ -1005,7 +1001,7 @@ var pixi = function (Kotlin) {
             }
           }
         }),
-        Point: Kotlin.createClass(null, function (x, y) {
+        Point: Kotlin.createClass(null, function Point(x, y) {
           if (x === void 0)
             x = 0.0;
           if (y === void 0)
@@ -1048,7 +1044,7 @@ var pixi = function (Kotlin) {
             return new _.pixi.math.Point(this.x, this.y);
           }
         }),
-        Rectangle: Kotlin.createClass(null, function (x, y, width, height) {
+        Rectangle: Kotlin.createClass(null, function Rectangle(x, y, width, height) {
           if (x === void 0)
             x = 0.0;
           if (y === void 0)
@@ -1069,7 +1065,7 @@ var pixi = function (Kotlin) {
             this.height = rect.height;
           }
         }, /** @lends _.pixi.math.Rectangle */ {
-          Companion: Kotlin.createObject(null, function () {
+          Companion: Kotlin.createObject(null, function Companion() {
             _.pixi.math.Rectangle.Companion.EMPTY = new _.pixi.math.Rectangle();
           }),
           object_initializer$: function () {
@@ -1079,7 +1075,7 @@ var pixi = function (Kotlin) {
         Versionable: Kotlin.createTrait(null)
       }),
       renderers: Kotlin.definePackage(null, /** @lends _.pixi.renderers */ {
-        ObjectRenderer: Kotlin.createClass(null, function (renderer) {
+        ObjectRenderer: Kotlin.createClass(null, function ObjectRenderer(renderer) {
           this.renderer = renderer;
         }, /** @lends _.pixi.renderers.ObjectRenderer.prototype */ {
           start: function () {
@@ -1089,7 +1085,7 @@ var pixi = function (Kotlin) {
           flush: function () {
           }
         }),
-        RenderOptions: Kotlin.createClass(null, function (view, resolution, antialias, transparent, autoResize, forceFXAA, clearBeforeRender, roundPixels, backgroundColor, preserveDrawingBuffer) {
+        RenderOptions: Kotlin.createClass(null, function RenderOptions(view, resolution, antialias, transparent, autoResize, forceFXAA, clearBeforeRender, roundPixels, backgroundColor, preserveDrawingBuffer) {
           if (view === void 0)
             view = null;
           if (resolution === void 0)
@@ -1182,7 +1178,7 @@ var pixi = function (Kotlin) {
         },
         RenderTarget: Kotlin.createClass(function () {
           return [_.pixi.Destroyable];
-        }, function (gl, width, height, scaleMode, resolution, root) {
+        }, function RenderTarget(gl, width, height, scaleMode, resolution, root) {
           if (scaleMode === void 0)
             scaleMode = _.pixi.ScaleMode.Companion.DEFAULT;
           if (resolution === void 0)
@@ -1293,7 +1289,7 @@ var pixi = function (Kotlin) {
             if (clearColor === void 0)
               clearColor = null;
             var rgba = (clearColor != null ? clearColor : this.clearColor).rgba;
-            (tmp$0 = this.frameBuffer) != null ? tmp$0.clear(_.pixi.utils.get_25qnj7$(rgba, 0), _.pixi.utils.get_25qnj7$(rgba, 1), _.pixi.utils.get_25qnj7$(rgba, 2), _.pixi.utils.get_25qnj7$(rgba, 3)) : null;
+            (tmp$0 = this.frameBuffer) != null ? tmp$0.clear(rgba[0], rgba[1], rgba[2], rgba[3]) : null;
           },
           isDestroyed: {
             get: function () {
@@ -1318,7 +1314,7 @@ var pixi = function (Kotlin) {
         },
         Shader: Kotlin.createClass(function () {
           return [_.pixi.Destroyable];
-        }, function (renderer, vertexSrc, fragmentSrc) {
+        }, function Shader(renderer, vertexSrc, fragmentSrc) {
           this.renderer = renderer;
           this.shader_ymn70s$ = new PIXI.glCore.GLShader(this.renderer.gl, _.pixi.renderers.checkPrecision_61zpoe$(vertexSrc), _.pixi.renderers.checkPrecision_61zpoe$(fragmentSrc));
           this.$isDestroyed_q6u8zs$ = false;
@@ -1366,7 +1362,7 @@ var pixi = function (Kotlin) {
         },
         SystemRenderer: Kotlin.createClass(function () {
           return [_.pixi.Destroyable];
-        }, function (width, height, options) {
+        }, function SystemRenderer(width, height, options) {
           if (width === void 0)
             width = 800;
           if (height === void 0)
@@ -1425,7 +1421,7 @@ var pixi = function (Kotlin) {
             }
           }
         }),
-        TextureGarbageCollector: Kotlin.createClass(null, function (renderer) {
+        TextureGarbageCollector: Kotlin.createClass(null, function TextureGarbageCollector(renderer) {
           this.gl = renderer.gl;
           this._managedTextures = Kotlin.kotlin.collections.emptyList();
           this.count = 0;
@@ -1439,7 +1435,7 @@ var pixi = function (Kotlin) {
         }),
         TextureManager: Kotlin.createClass(function () {
           return [_.pixi.Destroyable];
-        }, function (renderer) {
+        }, function TextureManager(renderer) {
           this.$isDestroyed_5fbu4r$ = false;
           this.gl = renderer.gl;
           this._managedTextures = Kotlin.kotlin.collections.emptyList();
@@ -1497,7 +1493,7 @@ var pixi = function (Kotlin) {
         }),
         WebGLRenderer: Kotlin.createClass(function () {
           return [_.pixi.renderers.SystemRenderer];
-        }, function $fun(width, height, options) {
+        }, function WebGLRenderer(width, height, options) {
           if (width === void 0)
             width = 800;
           if (height === void 0)
@@ -1505,7 +1501,7 @@ var pixi = function (Kotlin) {
           if (options === void 0)
             options = new _.pixi.renderers.RenderOptions();
           var tmp$0;
-          $fun.baseInitializer.call(this, width, height, options);
+          WebGLRenderer.baseInitializer.call(this, width, height, options);
           this.$type_2txetq$ = _.pixi.RendererType.WEBGL;
           this.gl = Kotlin.isType(tmp$0 = this.view.getContext('webgl'), WebGLRenderingContext) ? tmp$0 : Kotlin.throwCCE();
           this.rootRenderTarget = new _.pixi.renderers.RenderTarget(this.gl, width, height, _.pixi.ScaleMode.Companion.DEFAULT, this.resolution, true);
@@ -1673,7 +1669,7 @@ var pixi = function (Kotlin) {
           _.pixi.renderers.WebGLRenderer.call($this, width, height, _.pixi.renderers.renderOptions_mpdkzt$(init));
           return $this;
         },
-        WebGLState: Kotlin.createClass(null, function (gl) {
+        WebGLState: Kotlin.createClass(null, function WebGLState(gl) {
           var tmp$0, tmp$1, tmp$2, tmp$3;
           this.gl = gl;
           this.activeState = new Uint8Array(16);
@@ -1701,7 +1697,7 @@ var pixi = function (Kotlin) {
           setBlend_za3lpa$: function (value) {
             if (value === void 0)
               value = 0;
-            if (_.pixi.utils.get_vbk1hc$(this.activeState, _.pixi.renderers.WebGLState.Companion.BLEND) === value) {
+            if (this.activeState[_.pixi.renderers.WebGLState.Companion.BLEND] === value) {
               return;
             }
             this.activeState[_.pixi.renderers.WebGLState.Companion.BLEND] = value;
@@ -1715,7 +1711,7 @@ var pixi = function (Kotlin) {
           setDepthTest_za3lpa$: function (value) {
             if (value === void 0)
               value = 0;
-            if (_.pixi.utils.get_vbk1hc$(this.activeState, _.pixi.renderers.WebGLState.Companion.DEPTH_TEST) === value) {
+            if (this.activeState[_.pixi.renderers.WebGLState.Companion.DEPTH_TEST] === value) {
               return;
             }
             this.activeState[_.pixi.renderers.WebGLState.Companion.DEPTH_TEST] = value;
@@ -1729,7 +1725,7 @@ var pixi = function (Kotlin) {
           setFrontFace_za3lpa$: function (value) {
             if (value === void 0)
               value = 0;
-            if (_.pixi.utils.get_vbk1hc$(this.activeState, _.pixi.renderers.WebGLState.Companion.FRONT_FACE) === value) {
+            if (this.activeState[_.pixi.renderers.WebGLState.Companion.FRONT_FACE] === value) {
               return;
             }
             this.activeState[_.pixi.renderers.WebGLState.Companion.FRONT_FACE] = value;
@@ -1743,7 +1739,7 @@ var pixi = function (Kotlin) {
           setCullFace_za3lpa$: function (value) {
             if (value === void 0)
               value = 0;
-            if (_.pixi.utils.get_vbk1hc$(this.activeState, _.pixi.renderers.WebGLState.Companion.CULL_FACE) === value) {
+            if (this.activeState[_.pixi.renderers.WebGLState.Companion.CULL_FACE] === value) {
               return;
             }
             this.activeState[_.pixi.renderers.WebGLState.Companion.CULL_FACE] = value;
@@ -1755,7 +1751,7 @@ var pixi = function (Kotlin) {
             }
           },
           setBlendMode_7sz4cw$: function (value) {
-            if (_.pixi.utils.get_vbk1hc$(this.activeState, _.pixi.renderers.WebGLState.Companion.BLEND_FUNC) === value.bcode) {
+            if (this.activeState[_.pixi.renderers.WebGLState.Companion.BLEND_FUNC] === value.bcode) {
               return;
             }
             this.activeState[_.pixi.renderers.WebGLState.Companion.BLEND_FUNC] = value.bcode;
@@ -1785,7 +1781,7 @@ var pixi = function (Kotlin) {
             this.setState_za3rmp$(this.defaultState);
           }
         }, /** @lends _.pixi.renderers.WebGLState */ {
-          Companion: Kotlin.createObject(null, function () {
+          Companion: Kotlin.createObject(null, function Companion() {
             _.pixi.renderers.WebGLState.Companion.BLEND = 0;
             _.pixi.renderers.WebGLState.Companion.DEPTH_TEST = 1;
             _.pixi.renderers.WebGLState.Companion.FRONT_FACE = 2;
@@ -1800,10 +1796,10 @@ var pixi = function (Kotlin) {
       sprite: Kotlin.definePackage(null, /** @lends _.pixi.sprite */ {
         Sprite: Kotlin.createClass(function () {
           return [_.pixi.math.Versionable, _.pixi.display.Container];
-        }, function $fun(texture) {
+        }, function Sprite(texture) {
           if (texture === void 0)
             texture = _.pixi.textures.Texture.Companion.EMPTY;
-          $fun.baseInitializer.call(this);
+          Sprite.baseInitializer.call(this);
           this._texture_rkxmcg$ = texture;
           this.blendMode = _.pixi.BlendMode.NORMAL;
           this.vertexData = new Float32Array(8);
@@ -1873,12 +1869,12 @@ var pixi = function (Kotlin) {
           this.regexCount = Kotlin.kotlin.text.Regex_61zpoe$('%count%');
           this.regexForLoop = Kotlin.kotlin.text.Regex_61zpoe$('%forloop%');
         }, /** @lends _.pixi.sprite.webgl */ {
-          BatchBuffer: Kotlin.createClass(null, function (size) {
+          BatchBuffer: Kotlin.createClass(null, function BatchBuffer(size) {
             this.vertices = new ArrayBuffer(size);
             this.float32View = new Float32Array(this.vertices);
             this.uint32View = new Uint32Array(this.vertices);
           }),
-          BatchGroup: Kotlin.createClass(null, function () {
+          BatchGroup: Kotlin.createClass(null, function BatchGroup() {
             this.textures = Kotlin.kotlin.collections.mutableListOf_9mqe4v$([]);
             this.textureCount = 0;
             this.size = 0;
@@ -1943,8 +1939,8 @@ var pixi = function (Kotlin) {
           },
           SpriteRenderer: Kotlin.createClass(function () {
             return [_.pixi.Destroyable, _.pixi.renderers.ObjectRenderer];
-          }, function $fun(renderer) {
-            $fun.baseInitializer.call(this, renderer);
+          }, function SpriteRenderer(renderer) {
+            SpriteRenderer.baseInitializer.call(this, renderer);
             this.$isDestroyed_b1z7ul$ = false;
             this.vertSize = 5;
             this.vertByteSize = this.vertSize * 4;
@@ -2014,7 +2010,7 @@ var pixi = function (Kotlin) {
               this.vertexCount = 0;
             },
             flush: function () {
-              var tmp$0, tmp$1, tmp$2, tmp$3, tmp$4, tmp$5, tmp$6, tmp$7, tmp$8, tmp$9;
+              var tmp$0, tmp$1, tmp$2, tmp$3, tmp$4, tmp$5, tmp$6, tmp$7, tmp$8;
               var currentIndex = this.sprites.size;
               if (currentIndex === 0) {
                 return;
@@ -2072,24 +2068,24 @@ var pixi = function (Kotlin) {
                 var textureId = nextTexture._id * 1.0;
                 if (this.renderer.roundPixels) {
                   var resolution = this.renderer.resolution;
-                  float32View[index] = Math.floor(_.pixi.utils.get_25qnj7$(vertexData, 0) * resolution) / resolution;
-                  float32View[index + 1] = Math.floor(_.pixi.utils.get_25qnj7$(vertexData, 1) * resolution) / resolution;
-                  float32View[index + 5] = Math.floor(_.pixi.utils.get_25qnj7$(vertexData, 2) * resolution) / resolution;
-                  float32View[index + 6] = Math.floor(_.pixi.utils.get_25qnj7$(vertexData, 3) * resolution) / resolution;
-                  float32View[index + 10] = Math.floor(_.pixi.utils.get_25qnj7$(vertexData, 4) * resolution) / resolution;
-                  float32View[index + 11] = Math.floor(_.pixi.utils.get_25qnj7$(vertexData, 5) * resolution) / resolution;
-                  float32View[index + 15] = Math.floor(_.pixi.utils.get_25qnj7$(vertexData, 6) * resolution) / resolution;
-                  float32View[index + 16] = Math.floor(_.pixi.utils.get_25qnj7$(vertexData, 7) * resolution) / resolution;
+                  float32View[index] = Math.floor(vertexData[0] * resolution) / resolution;
+                  float32View[index + 1] = Math.floor(vertexData[1] * resolution) / resolution;
+                  float32View[index + 5] = Math.floor(vertexData[2] * resolution) / resolution;
+                  float32View[index + 6] = Math.floor(vertexData[3] * resolution) / resolution;
+                  float32View[index + 10] = Math.floor(vertexData[4] * resolution) / resolution;
+                  float32View[index + 11] = Math.floor(vertexData[5] * resolution) / resolution;
+                  float32View[index + 15] = Math.floor(vertexData[6] * resolution) / resolution;
+                  float32View[index + 16] = Math.floor(vertexData[7] * resolution) / resolution;
                 }
                  else {
-                  float32View[index] = _.pixi.utils.get_25qnj7$(vertexData, 0);
-                  float32View[index + 1] = _.pixi.utils.get_25qnj7$(vertexData, 1);
-                  float32View[index + 5] = _.pixi.utils.get_25qnj7$(vertexData, 2);
-                  float32View[index + 6] = _.pixi.utils.get_25qnj7$(vertexData, 3);
-                  float32View[index + 10] = _.pixi.utils.get_25qnj7$(vertexData, 4);
-                  float32View[index + 11] = _.pixi.utils.get_25qnj7$(vertexData, 5);
-                  float32View[index + 15] = _.pixi.utils.get_25qnj7$(vertexData, 6);
-                  float32View[index + 16] = _.pixi.utils.get_25qnj7$(vertexData, 7);
+                  float32View[index] = vertexData[0];
+                  float32View[index + 1] = vertexData[1];
+                  float32View[index + 5] = vertexData[2];
+                  float32View[index + 6] = vertexData[3];
+                  float32View[index + 10] = vertexData[4];
+                  float32View[index + 11] = vertexData[5];
+                  float32View[index + 15] = vertexData[6];
+                  float32View[index + 16] = vertexData[7];
                 }
                 uint32View[index + 2] = _.pixi.utils.get_9qikkl$(uvs, 0);
                 uint32View[index + 7] = _.pixi.utils.get_9qikkl$(uvs, 1);
@@ -2117,10 +2113,14 @@ var pixi = function (Kotlin) {
               for (var i_0 = 0; i_0 <= tmp$7; i_0++) {
                 var group = this.groups[i_0];
                 var groupTextureCount = group.textureCount;
-                var shader = (tmp$8 = this.shaders[groupTextureCount - 1]) != null ? tmp$8 : _.pixi.sprite.webgl.generateMultiTextureShader_6ioa9g$(this.renderer, groupTextureCount);
+                var shader = this.shaders[groupTextureCount - 1];
+                if (shader == null) {
+                  shader = _.pixi.sprite.webgl.generateMultiTextureShader_6ioa9g$(this.renderer, groupTextureCount);
+                  this.shaders[groupTextureCount - 1] = shader;
+                }
                 this.renderer.bindShader_opcsrd$(shader);
-                tmp$9 = groupTextureCount - 1;
-                for (var j = 0; j <= tmp$9; j++) {
+                tmp$8 = groupTextureCount - 1;
+                for (var j = 0; j <= tmp$8; j++) {
                   this.renderer.bindTexture_nqtr3l$(group.textures.get_za3lpa$(j), j);
                 }
                 this.renderer.state.setBlendMode_7sz4cw$(group.blend);
@@ -2154,7 +2154,7 @@ var pixi = function (Kotlin) {
             onContextChange$f: function (i) {
               return null;
             },
-            Companion: Kotlin.createObject(null, function () {
+            Companion: Kotlin.createObject(null, function Companion() {
               _.pixi.sprite.webgl.SpriteRenderer.Companion.BATCH_SIZE = 4096;
               _.pixi.sprite.webgl.SpriteRenderer.Companion.MAX_TEXTURES = 32;
             }),
@@ -2170,10 +2170,10 @@ var pixi = function (Kotlin) {
       textures: Kotlin.definePackage(null, /** @lends _.pixi.textures */ {
         BaseRenderTexture: Kotlin.createClass(function () {
           return [_.pixi.textures.BaseTexture];
-        }, function $fun() {
-          $fun.baseInitializer.call(this);
+        }, function BaseRenderTexture() {
+          BaseRenderTexture.baseInitializer.call(this);
         }),
-        BaseTexture: Kotlin.createClass(null, function (source, scaleMode, resolution) {
+        BaseTexture: Kotlin.createClass(null, function BaseTexture(source, scaleMode, resolution) {
           if (source === void 0)
             source = null;
           if (scaleMode === void 0)
@@ -2222,13 +2222,13 @@ var pixi = function (Kotlin) {
         }),
         RenderTexture: Kotlin.createClass(function () {
           return [_.pixi.textures.Texture];
-        }, function $fun(baseRenderTexture, frame) {
+        }, function RenderTexture(baseRenderTexture, frame) {
           if (frame === void 0)
             frame = null;
-          $fun.baseInitializer.call(this, baseRenderTexture, frame);
+          RenderTexture.baseInitializer.call(this, baseRenderTexture, frame);
           this.baseRenderTexture = baseRenderTexture;
         }),
-        Texture: Kotlin.createClass(null, function (baseTexture, frame, orig, trim, rotate) {
+        Texture: Kotlin.createClass(null, function Texture(baseTexture, frame, orig, trim, rotate) {
           if (frame === void 0)
             frame = null;
           if (orig === void 0)
@@ -2261,7 +2261,7 @@ var pixi = function (Kotlin) {
             this._updateID++;
           }
         }, /** @lends _.pixi.textures.Texture */ {
-          Companion: Kotlin.createObject(null, function () {
+          Companion: Kotlin.createObject(null, function Companion() {
             _.pixi.textures.Texture.Companion.EMPTY = new _.pixi.textures.Texture(new _.pixi.textures.BaseTexture());
             _.pixi.textures.Texture.Companion.EMPTY.valid = false;
           }),
@@ -2269,7 +2269,7 @@ var pixi = function (Kotlin) {
             _.pixi.textures.Texture.Companion;
           }
         }),
-        TextureUVs: Kotlin.createClass(null, function () {
+        TextureUVs: Kotlin.createClass(null, function TextureUVs() {
           this.x0 = 0.0;
           this.y0 = 0.0;
           this.x1 = 1.0;
@@ -2362,30 +2362,28 @@ var pixi = function (Kotlin) {
             $receiver.set_vux3hl$(i, $receiver.get_za3lpa$(i + range));
           }
         },
-        get_ynspw0$: function ($receiver, index) {
-          var tmp$0;
-          return (tmp$0 = $receiver[index]) != null ? tmp$0 : Kotlin.throwNPE();
-        },
-        get_gt95ti$: function ($receiver, index) {
-          var tmp$0;
-          return (tmp$0 = $receiver[index]) != null ? tmp$0 : Kotlin.throwNPE();
-        },
-        get_vbk1hc$: function ($receiver, index) {
-          var tmp$0;
-          return (tmp$0 = $receiver[index]) != null ? tmp$0 : Kotlin.throwNPE();
-        },
+        g_ynspw0$: Kotlin.defineInlineFunction('pixi.pixi.utils.g_ynspw0$', function ($receiver, index) {
+          return $receiver[index];
+        }),
+        g_gt95ti$: Kotlin.defineInlineFunction('pixi.pixi.utils.g_gt95ti$', function ($receiver, index) {
+          return $receiver[index];
+        }),
+        g_vbk1hc$: Kotlin.defineInlineFunction('pixi.pixi.utils.g_vbk1hc$', function ($receiver, index) {
+          return $receiver[index];
+        }),
+        g_9qikkl$: Kotlin.defineInlineFunction('pixi.pixi.utils.g_9qikkl$', function ($receiver, index) {
+          return $receiver[index];
+        }),
         get_9qikkl$: function ($receiver, index) {
           var tmp$0;
           return (tmp$0 = $receiver[index]) != null ? tmp$0 : Kotlin.throwNPE();
         },
-        get_9tjlp1$: function ($receiver, index) {
-          var tmp$0;
-          return (tmp$0 = $receiver[index]) != null ? tmp$0 : Kotlin.throwNPE();
-        },
-        get_25qnj7$: function ($receiver, index) {
-          var tmp$0;
-          return (tmp$0 = $receiver[index]) != null ? tmp$0 : Kotlin.throwNPE();
-        },
+        g_9tjlp1$: Kotlin.defineInlineFunction('pixi.pixi.utils.g_9tjlp1$', function ($receiver, index) {
+          return $receiver[index];
+        }),
+        g_25qnj7$: Kotlin.defineInlineFunction('pixi.pixi.utils.g_25qnj7$', function ($receiver, index) {
+          return $receiver[index];
+        }),
         sayHello_61zpoe$: function (type) {
           if (_.pixi.utils._saidHello_mtyt57$) {
             return;
