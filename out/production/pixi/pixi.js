@@ -2087,10 +2087,10 @@ var pixi = function (Kotlin) {
                   float32View[index + 15] = vertexData[6];
                   float32View[index + 16] = vertexData[7];
                 }
-                uint32View[index + 2] = _.pixi.utils.get_9qikkl$(uvs, 0);
-                uint32View[index + 7] = _.pixi.utils.get_9qikkl$(uvs, 1);
-                uint32View[index + 12] = _.pixi.utils.get_9qikkl$(uvs, 2);
-                uint32View[index + 17] = _.pixi.utils.get_9qikkl$(uvs, 3);
+                uint32View[index + 2] = uvs[0];
+                uint32View[index + 7] = uvs[1];
+                uint32View[index + 12] = uvs[2];
+                uint32View[index + 17] = uvs[3];
                 uint32View[index + 3] = tint;
                 uint32View[index + 8] = tint;
                 uint32View[index + 13] = tint;
