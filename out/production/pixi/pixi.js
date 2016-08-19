@@ -1804,10 +1804,10 @@ var pixi = function (Kotlin) {
             }
             this.activeState[_.pixi.renderers.WebGLState.Companion.FRONT_FACE] = value;
             if (value === 1) {
-              this.gl.enable(WebGLRenderingContext.CW);
+              this.gl.frontFace(WebGLRenderingContext.CW);
             }
              else {
-              this.gl.disable(WebGLRenderingContext.CW);
+              this.gl.frontFace(WebGLRenderingContext.CCW);
             }
           },
           setCullFace_za3lpa$: function (value) {
