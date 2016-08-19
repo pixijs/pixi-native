@@ -262,109 +262,109 @@ var pixi = function (Kotlin) {
         }
       }),
       Color: Kotlin.createClass(null, function Color() {
-        this._rgba_izyxo$ = new Float32Array(Kotlin.kotlin.collections.toTypedArray_rjqrz0$([1.0, 1.0, 1.0, 1.0]));
-        this._rgbInt_9yflym$ = -1;
-        this._alpha_gm83iq$ = 1.0;
+        this._rgba = new Float32Array(Kotlin.kotlin.collections.toTypedArray_rjqrz0$([1.0, 1.0, 1.0, 1.0]));
+        this._rgbInt = 16777215;
+        this._alpha = 1.0;
       }, /** @lends _.pixi.Color.prototype */ {
         rgbInt: {
           get: function () {
-            return this._rgbInt_9yflym$;
+            return this._rgbInt;
           },
           set: function (value) {
-            this._rgbInt_9yflym$ = value;
-            this._rgba_izyxo$[0] = (value >> 16 & 255) / 255.0;
-            this._rgba_izyxo$[1] = (value >> 8 & 255) / 255.0;
-            this._rgba_izyxo$[2] = (value & 255) / 255.0;
+            this._rgbInt = value;
+            this._rgba[0] = (value >> 16 & 255) / 255.0;
+            this._rgba[1] = (value >> 8 & 255) / 255.0;
+            this._rgba[2] = (value & 255) / 255.0;
           }
         },
         rgbaInt: {
           get: function () {
-            return this._rgbInt_9yflym$ | Math.floor(this._alpha_gm83iq$ * 255) << 24;
+            return this._rgbInt | Math.floor(this._alpha * 255) << 24;
           }
         },
         rgba: {
           get: function () {
-            return this._rgba_izyxo$;
+            return this._rgba;
           },
           set: function (value) {
-            this._rgbInt_9yflym$ = Math.floor(value[0] * 255.0) << 16 | Math.floor(value[1] * 255.0) << 8 | Math.floor(value[2] * 255.0);
-            this._alpha_gm83iq$ = value[3];
+            this._rgbInt = Math.floor(value[0] * 255.0) << 16 | Math.floor(value[1] * 255.0) << 8 | Math.floor(value[2] * 255.0);
+            this._alpha = value[3];
           }
         },
         alpha: {
           get: function () {
-            return this._alpha_gm83iq$;
+            return this._alpha;
           },
           set: function (value) {
-            this._alpha_gm83iq$ = value;
-            this._rgba_izyxo$[3] = value;
+            this._alpha = value;
+            this._rgba[3] = value;
           }
         },
         r: {
           get: function () {
-            return this._rgba_izyxo$[0];
+            return this._rgba[0];
           }
         },
         g: {
           get: function () {
-            return this._rgba_izyxo$[1];
+            return this._rgba[1];
           }
         },
         b: {
           get: function () {
-            return this._rgba_izyxo$[2];
+            return this._rgba[2];
           }
         },
         a: {
           get: function () {
-            return this._rgba_izyxo$[3];
+            return this._rgba[3];
           }
         },
         setVec4_7b5o5w$: function (r, g, b, a) {
-          this._rgba_izyxo$[0] = r;
-          this._rgba_izyxo$[1] = g;
-          this._rgba_izyxo$[2] = b;
-          this._rgba_izyxo$[3] = a;
-          this._rgbInt_9yflym$ = Math.floor(r * 255.0) << 16 | Math.floor(g * 255.0) << 8 | Math.floor(b * 255.0);
-          this._alpha_gm83iq$ = a;
+          this._rgba[0] = r;
+          this._rgba[1] = g;
+          this._rgba[2] = b;
+          this._rgba[3] = a;
+          this._rgbInt = Math.floor(r * 255.0) << 16 | Math.floor(g * 255.0) << 8 | Math.floor(b * 255.0);
+          this._alpha = a;
         },
         rgbHex: {
           get: function () {
-            return '#' + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ << 20 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ << 16 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ << 12 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ << 8 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ << 4 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt_9yflym$ & 15);
+            return '#' + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt << 20 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt << 16 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt << 12 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt << 8 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt << 4 & 15) + _.pixi.hexStr_nsqiau$.charAt(this._rgbInt & 15);
           },
           set: function (value) {
-            this._rgbInt_9yflym$ = 0;
+            this._rgbInt = 0;
             for (var i = 1; i <= 6; i++) {
               if (value.charAt(i) >= '0' && value.charAt(i) <= '9') {
-                this._rgbInt_9yflym$ = this._rgbInt_9yflym$ | value.charAt(i).charCodeAt(0) - '0'.charCodeAt(0) << i * 4;
+                this._rgbInt = this._rgbInt | value.charAt(i).charCodeAt(0) - '0'.charCodeAt(0) << i * 4;
               }
                else if (value.charAt(i) >= 'A' && value.charAt(i) <= 'F') {
-                this._rgbInt_9yflym$ = this._rgbInt_9yflym$ | value.charAt(i).charCodeAt(0) - 'A'.charCodeAt(0) << i * 4;
+                this._rgbInt = this._rgbInt | value.charAt(i).charCodeAt(0) - 'A'.charCodeAt(0) << i * 4;
               }
                else if (value.charAt(i) >= 'a' && value.charAt(i) <= 'f') {
-                this._rgbInt_9yflym$ = this._rgbInt_9yflym$ | value.charAt(i).charCodeAt(0) - 'a'.charCodeAt(0) << i * 4;
+                this._rgbInt = this._rgbInt | value.charAt(i).charCodeAt(0) - 'a'.charCodeAt(0) << i * 4;
               }
             }
-            this.rgbInt = this._rgbInt_9yflym$;
+            this.rgbInt = this._rgbInt;
           }
         },
         copy_sgj01r$: function (clr) {
-          this._rgba_izyxo$[0] = clr._rgba_izyxo$[0];
-          this._rgba_izyxo$[1] = clr._rgba_izyxo$[1];
-          this._rgba_izyxo$[2] = clr._rgba_izyxo$[2];
-          this._rgba_izyxo$[3] = clr._rgba_izyxo$[3];
-          this._alpha_gm83iq$ = clr._alpha_gm83iq$;
-          this._rgbInt_9yflym$ = clr._rgbInt_9yflym$;
+          this._rgba[0] = clr._rgba[0];
+          this._rgba[1] = clr._rgba[1];
+          this._rgba[2] = clr._rgba[2];
+          this._rgba[3] = clr._rgba[3];
+          this._alpha = clr._alpha;
+          this._rgbInt = clr._rgbInt;
         },
         mul_sgj01r$: function (color) {
-          if (color._rgbInt_9yflym$ === 16777215 && color._alpha_gm83iq$ === 1.0)
+          if (color._rgbInt === 16777215 && color._alpha === 1.0)
             return;
-          this._rgba_izyxo$[0] = this._rgba_izyxo$[0] * color._rgba_izyxo$[0];
-          this._rgba_izyxo$[1] = this._rgba_izyxo$[1] * color._rgba_izyxo$[1];
-          this._rgba_izyxo$[2] = this._rgba_izyxo$[2] * color._rgba_izyxo$[2];
-          this._rgba_izyxo$[3] = this._rgba_izyxo$[3] * color._rgba_izyxo$[3];
-          this._rgbInt_9yflym$ = Math.floor(this._rgba_izyxo$[0] * 255.0) << 16 | Math.floor(this._rgba_izyxo$[1] * 255.0) << 8 | Math.floor(this._rgba_izyxo$[2] * 255.0);
-          this._alpha_gm83iq$ = this._rgba_izyxo$[3];
+          this._rgba[0] = this._rgba[0] * color._rgba[0];
+          this._rgba[1] = this._rgba[1] * color._rgba[1];
+          this._rgba[2] = this._rgba[2] * color._rgba[2];
+          this._rgba[3] = this._rgba[3] * color._rgba[3];
+          this._rgbInt = Math.floor(this._rgba[0] * 255.0) << 16 | Math.floor(this._rgba[1] * 255.0) << 8 | Math.floor(this._rgba[2] * 255.0);
+          this._alpha = this._rgba[3];
         }
       }),
       Color_init_za3lpa$: function (rgb, $this) {
@@ -562,14 +562,15 @@ var pixi = function (Kotlin) {
             }
           },
           renderWebGL_75dbqe$: function (renderer) {
-            var tmp$0;
-            if (!this.visible || this.worldAlpha <= 0.0 || !this.renderable) {
+            var tmp$2;
+            if (!this.visible || this.worldMulColor._alpha <= 0.0 || !this.renderable) {
               return;
             }
+            var a = this.children.array;
             this.objectRenderWebGL_75dbqe$(renderer);
-            tmp$0 = this.children.size - 1;
-            for (var i = 0; i <= tmp$0; i++) {
-              this.children.get_za3lpa$(i).renderWebGL_75dbqe$(renderer);
+            for (tmp$2 = 0; tmp$2 !== a.length; ++tmp$2) {
+              var child = a[tmp$2];
+              child.renderWebGL_75dbqe$(renderer);
             }
           }
         }),
