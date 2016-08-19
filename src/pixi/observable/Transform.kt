@@ -49,12 +49,12 @@ class Transform : PointObserver() {
         _nsx = Math.sin(skew.x.toDouble()).toFloat();
         _cx = Math.cos(skew.x.toDouble()).toFloat();
 
-        _localID++;
+        _pointVersion++;
     }
 
     fun updateLocalTransform() {
         val lt = localTransform;
-        if (_localID !== _currentLocalID) {
+        if (_pointVersion !== _currentLocalID) {
             val a = _cr * scale.x;
             val b = _sr * scale.x;
             val c = -_sr * scale.y;
@@ -67,7 +67,7 @@ class Transform : PointObserver() {
 
             lt.tx = position.x - (pivot.x * lt.a + pivot.y * lt.c);
             lt.ty = position.y - (pivot.x * lt.b + pivot.y * lt.d);
-            _currentLocalID = _localID;
+            _currentLocalID = _pointVersion;
 
             _parentID = -1;
         }
@@ -78,7 +78,7 @@ class Transform : PointObserver() {
         val wt = worldTransform;
         val lt = localTransform;
 
-        if (_localID !== _currentLocalID) {
+        if (_currentLocalID !== _pointVersion) {
             val a = _cr * scale.x;
             val b = _sr * scale.x;
             val c = -_sr * scale.y;
@@ -91,7 +91,7 @@ class Transform : PointObserver() {
 
             lt.tx = position.x - (pivot.x * lt.a + pivot.y * lt.c);
             lt.ty = position.y - (pivot.x * lt.b + pivot.y * lt.d);
-            _currentLocalID = _localID;
+            _currentLocalID = _pointVersion;
 
             _parentID = -1;
         }

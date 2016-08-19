@@ -46,7 +46,7 @@ open class Sprite(texture: Texture = Texture.EMPTY) : Container() {
         }
 
         _transformID = transform._worldID
-        _textureID == _texture._updateID
+        _textureID = _texture._updateID
 
         val texture = _texture
         val orig = texture.orig

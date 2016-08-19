@@ -16,7 +16,7 @@ inline fun Int32Array.g(index: Int): Int = this.myGet(index).asDynamic()
 @nativeSetter operator fun Int32Array.set(index: Int, value: Int?): Unit = noImpl
 
 @nativeGetter fun Int16Array.myGet(index: Int): Int? = noImpl
-inline fun Int16Array.g(index: Int): Int = this.myGet(index).asDynamic()
+inline fun Int16Array.get(index: Int): Int = this.myGet(index).asDynamic()
 @nativeSetter operator fun Int16Array.set(index: Int, value: Int?): Unit = noImpl
 
 @nativeGetter fun Uint8Array.myGet(index: Int): Int? = noImpl
@@ -33,5 +33,6 @@ inline fun Uint16Array.g(index: Int): Int = this.myGet(index).asDynamic()
 @nativeSetter operator fun Uint16Array.set(index: Int, value: Int?): Unit = noImpl
 
 @nativeGetter fun Float32Array.myGet(index: Int): Float? = noImpl
+inline operator fun Float32Array.get(index: Int): Float = this.myGet(index).asDynamic()
 inline fun Float32Array.g(index: Int): Float = this.myGet(index).asDynamic()
 @nativeSetter operator fun Float32Array.set(index: Int, value: Float?): Unit = noImpl

@@ -1,8 +1,8 @@
 package pixi.observable
 
 open class PointObserver {
-    var _localID: Int = 0
+    var _pointVersion: Int = 0
     inline fun invalidate() {
-        _localID++
+        _pointVersion++
     }
 }
