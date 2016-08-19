@@ -61,13 +61,19 @@ open class Container : DisplayObject() {
     }
 
     override fun renderWebGL(renderer: WebGLRenderer) {
-        if (!this.visible || this.worldAlpha <= 0f || !this.renderable) {
-            return;
+
+        if (!this.visible || this.worldMulColor._alpha <= 0f || !this.renderable) {
+            return
         }
+//        if (!this.visible || this.worldAlpha <= 0f || !this.renderable) {
+//            return;
+//        }
+
+        val a: Array<Container> = children.asDynamic().array
 
         objectRenderWebGL(renderer);
-        for (i in 0..children.size - 1) {
-            children[i].renderWebGL(renderer);
+        for (child in a) {
+            child.renderWebGL(renderer);
         }
     }
 }
