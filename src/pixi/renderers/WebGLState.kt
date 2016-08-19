@@ -80,9 +80,9 @@ class WebGLState(val gl: GL) {
         activeState[FRONT_FACE] = value
 
         if (value == 1) {
-            gl.enable(GL.CW)
+            gl.frontFace(GL.CW)
         } else {
-            gl.disable(GL.CW)
+            gl.frontFace(GL.CCW)
         }
     }
 
