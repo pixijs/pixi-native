@@ -8,7 +8,7 @@ hardware acceleration without prior knowledge of WebGL. Also, it's fast. Really 
 Demos
 ------------------------
 
-[Bunnymark](pixijs.github.io/pixi-native/) is slightly slower than in pixi.js
+[Bunnymark](https://pixijs.github.io/pixi-native/) is slightly slower than in pixi.js
 
 Workflow
 ------------------------
