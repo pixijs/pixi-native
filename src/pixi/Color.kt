@@ -6,9 +6,9 @@ import pixi.utils.*
 private val hexStr = "0123456789abcdef";
 
 class Color() {
-    private val _rgba = Float32Array(floatArrayOf(1f, 1f, 1f, 1f).toTypedArray());
-    private var _rgbInt: Int = -1;
-    private var _alpha: Float = 1.0f;
+    val _rgba = Float32Array(floatArrayOf(1f, 1f, 1f, 1f).toTypedArray());
+    var _rgbInt: Int = 0xffffff;
+    var _alpha: Float = 1.0f;
 
     var rgbInt: Int
         get() = _rgbInt
