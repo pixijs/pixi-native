@@ -6,9 +6,9 @@ import org.khronos.webgl.WebGLRenderingContext as GL
 import pixi.RendererType
 import pixi.ScaleMode
 import pixi.display.DisplayObject
-import pixi.observable.Transform
 import pixi.gl.VertexArrayObject
 import pixi.math.Matrix
+import pixi.observable.Transform
 import pixi.sprite.webgl.SpriteRenderer
 import pixi.textures.BaseTexture
 import pixi.textures.RenderTexture

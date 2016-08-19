@@ -45,10 +45,10 @@ class Color() {
         get() = _rgba.g(1)
 
     val b: Float
-        get() = _rgba.g(1)
+        get() = _rgba.g(2)
 
     val a: Float
-        get() = _rgba.g(1)
+        get() = _rgba.g(3)
 
     fun setVec4(r: Float, g: Float, b: Float, a: Float) {
         _rgba[0] = r;

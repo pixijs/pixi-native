@@ -2,8 +2,8 @@ package pixi.display
 
 import pixi.Color
 import pixi.math.Matrix
-import pixi.math.Point
-import pixi.math.Transform
+import pixi.observable.Point
+import pixi.observable.Transform
 import pixi.renderers.WebGLRenderer
 
 open class DisplayObject {

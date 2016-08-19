@@ -1,26 +1,58 @@
 package pixi.observable
 
-open class Point(open var x: Float = 0f, open var y: Float = 0f) {
-    open fun setAll(v: Float) {
-        x = v;
-        y = v;
+import pixi.observable.PointObserver
+
+class Point(var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
+    var cb: PointObserver = this
+
+    constructor(_cb: PointObserver, _x: Float = 0f, _y: Float = 0f) : this(_x, _y) {
+        cb = _cb
     }
 
-    open fun set(x: Float, y: Float) {
-        this.x = x;
-        this.y = y;
+    var x: Float
+        get() = _x
+        set(value: Float) {
+            if (_x == value) {
+                return
+            }
+            _x = value
+            cb.invalidate()
+        }
+
+    var y: Float
+        get() = _y
+        set(value: Float) {
+            if (_y == value) {
+                return
+            }
+            _y = value
+            cb.invalidate()
+        }
+
+    fun setAll(v: Float) {
+        if (_x == v && _y == v) {
+            return
+        }
+        _x = v
+        _y = v
+        cb.invalidate()
     }
 
-    open fun copy(p: Point) {
-        x = p.x;
-        y = p.y;
+    fun set(x: Float, y: Float) {
+        if (_x == x && _y == y) {
+            return
+        }
+        cb.invalidate();
+        _x = x;
+        _y = y;
     }
 
-    open fun equals(p: Point): Boolean {
-        return x == p.x && y == p.y;
-    }
-
-    open fun clone(): Point {
-        return Point(x, y);
+    fun copy(p: Point) {
+        if (_x == p.x && _y == p.y) {
+            return
+        }
+        _x = p.x;
+        _y = p.y;
+        cb.invalidate();
     }
 }

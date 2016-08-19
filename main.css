@@ -18,3 +18,25 @@ body {
 	font-size: 9px;
 	font-weight: bold;
 }
+
+.update-btn {
+    background: #ccc;
+	width: 74px;
+	position: absolute;
+	background-color:#105CB6;
+	padding: 3px;
+
+	top:80px;
+
+	font-family: Helvetica, Arial;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.green {
+    color:#00ff00;
+}
+
+.red {
+    color:#ff0000;
+}

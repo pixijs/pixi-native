@@ -11,6 +11,9 @@ import pixi.renderers.WebGLRenderer
 import pixi.sprite.Sprite
 import pixi.textures.BaseTexture
 import pixi.textures.Texture
+import kotlin.dom.addClass
+import kotlin.dom.onClick
+import kotlin.dom.removeClass
 
 val width = 800
 val height = 600
@@ -71,6 +74,19 @@ fun init() {
 
     counter.innerHTML = "$count BUNNIES";
 
+    updateBtn.onClick {
+        pause = !pause
+        if (pause) {
+            updateBtn.removeClass("green")
+            updateBtn.addClass("red")
+            updateBtn.innerHTML = "UP FEW"
+        } else {
+            updateBtn.removeClass("red")
+            updateBtn.addClass("green")
+            updateBtn.innerHTML = "UP ALL"
+        }
+    }
+
     raf()
 }
 
@@ -112,6 +128,8 @@ fun addBunny() {
     count++
 }
 
+var pause = false;
+
 fun update() {
     var maxX = width * 1f;
     var minX = 0f;
@@ -121,14 +139,16 @@ fun update() {
 
     if (adding) {
         if (count < MAX_BUNNIES) {
-            for (i in 0..99) {
+            for (i in 0..199) {
                 addBunny()
             }
         }
         counter.innerHTML = "$count BUNNIES";
     }
 
-    for (i in 0..count - 1) {
+    var start = if (pause) count*19/20 else 0
+
+    for (i in start..count - 1) {
         var bunny = bunnies[i]
         //bunny.rotation += bunny.spin as Float
         var transform = bunny.transform
@@ -163,16 +183,24 @@ var counter = document.createElement("div")
 
 var stats = js("""new Stats()""")
 
+var updateBtn = document.createElement("div")
+
 fun main(args: Array<String>) {
     jq {
         val body = document.body!!
         body.appendChild(renderer.view)
         body.appendChild(counter);
+        body.appendChild(updateBtn);
         body.appendChild(stats.domElement);
         stats.domElement.style.position = "absolute";
         stats.domElement.style.top = "0px";
 
-        counter.className = "counter";
+        counter.className = "counter"
+
+        updateBtn.className = "update-btn"
+        updateBtn.addClass("green")
+        updateBtn.innerHTML = "UP ALL"
+
         preload()
     }
 }
