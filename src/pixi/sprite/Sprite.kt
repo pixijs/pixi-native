@@ -3,14 +3,13 @@ package pixi.sprite
 import org.khronos.webgl.Float32Array
 import pixi.BlendMode
 import pixi.display.Container
-import pixi.observable.ObservablePoint
 import pixi.observable.Point
-import pixi.math.Versionable
+import pixi.observable.PointObserver
 import pixi.renderers.WebGLRenderer
 import pixi.textures.Texture
 import pixi.utils.set
 
-open class Sprite(texture: Texture = Texture.EMPTY) : Container(), Versionable {
+open class Sprite(texture: Texture = Texture.EMPTY) : Container() {
     private var _texture = texture;
 
     init {
@@ -36,14 +35,9 @@ open class Sprite(texture: Texture = Texture.EMPTY) : Container(), Versionable {
     var _transformID = -1
 
     //TODO: find that name for supression
-    //val anchor = ObservablePoint(@Suppress("LEAKING_THIS") this)
+    //val anchor = Point(@Suppress("LEAKING_THIS") this)
 
-    //TODO: dont need observable anchor for static transform
-    val anchor = Point()
-
-    override fun invalidate() {
-        _transformID = -1
-    }
+    val anchor = Point(transform)
 
     fun calculateVertices() {
         if (_transformID == transform._worldID &&

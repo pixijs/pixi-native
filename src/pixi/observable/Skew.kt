@@ -1,20 +1,12 @@
 package pixi.observable
 
-import pixi.observable.PointObserver
-
-class Point(var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
-    var cb: PointObserver = this
-
-    constructor(_cb: PointObserver, _x: Float = 0f, _y: Float = 0f) : this(_x, _y) {
-        cb = _cb
-    }
-
+class Skew(val transform: Transform, var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
     var x: Float
         get() = _x
         set(value: Float) {
             if (_x != value) {
                 _x = value
-                cb.invalidate()
+                transform.updateSkew()
             }
         }
 
@@ -23,7 +15,7 @@ class Point(var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
         set(value: Float) {
             if (_y != value) {
                 _y = value
-                cb.invalidate()
+                transform.updateSkew()
             }
         }
 
@@ -31,7 +23,7 @@ class Point(var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
         if (_x !== v || _y !== v) {
             _x = v;
             _y = v;
-            cb.invalidate();
+            transform.updateSkew();
         }
     }
 
@@ -39,7 +31,15 @@ class Point(var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
         if (_x !== x || _y !== y) {
             _x = x;
             _y = y;
-            cb.invalidate();
+            transform.updateSkew();
+        }
+    }
+
+    fun copy(p: Skew) {
+        if (_x !== p.x || _y !== p.y) {
+            _x = p.x;
+            _y = p.y;
+            transform.updateSkew();
         }
     }
 
@@ -47,7 +47,7 @@ class Point(var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
         if (_x !== p.x || _y !== p.y) {
             _x = p.x;
             _y = p.y;
-            cb.invalidate();
+            transform.updateSkew();
         }
     }
 }
