@@ -1,7 +1,6 @@
 package pixi.math
 
 import org.khronos.webgl.Float32Array
-import pixi.utils.set
 
 data class Matrix(var a: Float = 1.0f, var b: Float = 0.0f,
                   var c: Float = 0.0f, var d: Float = 1.0f,

@@ -2,7 +2,7 @@ package pixi
 
 import org.khronos.webgl.WebGLRenderingContext as GL
 
-enum class BlendMode(val bcode: Int, val canvasName: String, val glFirstMul: Int = GL.ONE, val glSecondMul: Int = GL.ONE_MINUS_SRC_ALPHA) {
+enum class BlendMode(val bcode: Byte, val canvasName: String, val glFirstMul: Int = GL.ONE, val glSecondMul: Int = GL.ONE_MINUS_SRC_ALPHA) {
     NORMAL(0, "source-over"),
     ADD(1, "lighter", GL.ONE, GL.DST_ALPHA),
     MULTIPLY(2, "multiply", GL.DST_COLOR, GL.ONE_MINUS_SRC_ALPHA),

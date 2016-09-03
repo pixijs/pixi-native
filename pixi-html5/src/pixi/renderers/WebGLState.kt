@@ -2,10 +2,7 @@ package pixi.renderers
 
 import org.khronos.webgl.Uint8Array
 import pixi.BlendMode
-import pixi.utils.g
-import pixi.utils.get
 import org.khronos.webgl.WebGLRenderingContext as GL
-import pixi.utils.set
 
 class WebGLState(val gl: GL) {
     var activeState = Uint8Array(16)
@@ -45,11 +42,11 @@ class WebGLState(val gl: GL) {
     }
 
     fun setBlend(value: Int = 0) {
-        if (activeState.g(BLEND) == value) {
+        if (activeState[BLEND] == value.toByte()) {
             return
         }
 
-        activeState[BLEND] = value
+        activeState[BLEND] = value.toByte()
 
         if (value == 1) {
             gl.enable(GL.BLEND)
@@ -59,11 +56,11 @@ class WebGLState(val gl: GL) {
     }
 
     fun setDepthTest(value: Int = 0) {
-        if (activeState.g(DEPTH_TEST) == value) {
+        if (activeState[DEPTH_TEST] == value.toByte()) {
             return
         }
 
-        activeState[DEPTH_TEST] = value
+        activeState[DEPTH_TEST] = value.toByte()
 
         if (value == 1) {
             gl.enable(GL.DEPTH_TEST)
@@ -73,11 +70,11 @@ class WebGLState(val gl: GL) {
     }
 
     fun setFrontFace(value: Int = 0) {
-        if (activeState.g(FRONT_FACE) == value) {
+        if (activeState[FRONT_FACE] == value.toByte()) {
             return
         }
 
-        activeState[FRONT_FACE] = value
+        activeState[FRONT_FACE] = value.toByte()
 
         if (value == 1) {
             gl.frontFace(GL.CW)
@@ -87,11 +84,11 @@ class WebGLState(val gl: GL) {
     }
 
     fun setCullFace(value: Int = 0) {
-        if (activeState.g(CULL_FACE) == value) {
+        if (activeState[CULL_FACE] == value.toByte()) {
             return
         }
 
-        activeState[CULL_FACE] = value
+        activeState[CULL_FACE] = value.toByte()
 
         if (value == 1) {
             gl.enable(GL.CULL_FACE)
@@ -101,7 +98,7 @@ class WebGLState(val gl: GL) {
     }
 
     fun setBlendMode(value: BlendMode) {
-        if (activeState.g(BLEND_FUNC) == value.bcode) {
+        if (activeState[BLEND_FUNC] == value.bcode) {
             return
         }
 
