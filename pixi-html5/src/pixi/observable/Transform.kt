@@ -20,34 +20,34 @@ class Transform : PointObserver() {
 
     val position = Point(this);
 
-    val scale = Point(this, 1f, 1f);
+    val scale = Point(this, 1.0, 1.0);
 
     val pivot = Point(this);
 
     val skew = Point(this);
 
-    private var _rotation: Float = 0f;
-    private var _sr: Float = 0f;
-    private var _cr: Float = 1f;
+    private var _rotation: Double = 0.0;
+    private var _sr: Double = 0.0;
+    private var _cr: Double = 1.0;
 
-    private var rotation: Float
+    private var rotation: Double
         get() = _rotation
-        set(value: Float) {
+        set(value: Double) {
             _rotation = value;
-            _sr = Math.sin(value.toDouble()).toFloat();
-            _cr = Math.cos(value.toDouble()).toFloat();
+            _sr = Math.sin(value);
+            _cr = Math.cos(value);
         }
 
-    private var _cy: Float = 1f;
-    private var _sy: Float = 0f;
-    private var _nsx: Float = 0f;
-    private var _cx: Float = 1f;
+    private var _cy: Double = 1.0;
+    private var _sy: Double = 0.0;
+    private var _nsx: Double = 0.0;
+    private var _cx: Double = 1.0;
 
     fun updateSkew() {
-        _cy = Math.cos(skew.y.toDouble()).toFloat();
-        _sy = Math.sin(skew.y.toDouble()).toFloat();
-        _nsx = Math.sin(skew.x.toDouble()).toFloat();
-        _cx = Math.cos(skew.x.toDouble()).toFloat();
+        _cy = Math.cos(skew.y);
+        _sy = Math.sin(skew.y);
+        _nsx = Math.sin(skew.x);
+        _cx = Math.cos(skew.x);
 
         _pointVersion++;
     }

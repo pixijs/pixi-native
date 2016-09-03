@@ -52,10 +52,10 @@ open class Sprite(texture: Texture = Texture.EMPTY) : Container() {
         val orig = texture.orig
         val trim = texture.trim
         val wt = transform.worldTransform
-        var w0: Float
-        var w1: Float
-        var h0: Float
-        var h1: Float
+        var w0: Double
+        var w1: Double
+        var h0: Double
+        var h1: Double
 
         if (trim != null) {
             w1 = trim.x - anchor.x * orig.width;

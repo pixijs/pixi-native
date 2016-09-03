@@ -37,15 +37,15 @@ open class DisplayObject {
             transform.pivot.copy(value)
         }
 
-    var x: Float
+    var x: Double
         get() = transform.position.x
-        set(value: Float) {
+        set(value) {
             transform.position.x = value
         }
 
-    var y: Float
+    var y: Double
         get() = transform.position.y
-        set(value: Float) {
+        set(value) {
             transform.position.y = value
         }
 

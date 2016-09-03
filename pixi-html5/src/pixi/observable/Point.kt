@@ -2,16 +2,16 @@ package pixi.observable
 
 import pixi.observable.PointObserver
 
-class Point(var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
+class Point(var _x: Double = 0.0, var _y: Double = 0.0) : PointObserver() {
     var cb: PointObserver = this
 
-    constructor(_cb: PointObserver, _x: Float = 0f, _y: Float = 0f) : this(_x, _y) {
+    constructor(_cb: PointObserver, _x: Double = 0.0, _y: Double = 0.0) : this(_x, _y) {
         cb = _cb
     }
 
-    var x: Float
+    var x: Double
         get() = _x
-        set(value: Float) {
+        set(value) {
             if (_x == value) {
                 return
             }
@@ -19,9 +19,9 @@ class Point(var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
             cb.invalidate()
         }
 
-    var y: Float
+    var y: Double
         get() = _y
-        set(value: Float) {
+        set(value) {
             if (_y == value) {
                 return
             }
@@ -29,7 +29,7 @@ class Point(var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
             cb.invalidate()
         }
 
-    fun setAll(v: Float) {
+    fun setAll(v: Double) {
         if (_x == v && _y == v) {
             return
         }
@@ -38,7 +38,7 @@ class Point(var _x: Float = 0f, var _y: Float = 0f) : PointObserver() {
         cb.invalidate()
     }
 
-    fun set(x: Float, y: Float) {
+    fun set(x: Double, y: Double) {
         if (_x == x && _y == y) {
             return
         }

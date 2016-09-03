@@ -17,3 +17,7 @@ inline operator fun Uint16Array.set(index: Int, value: Int) {
 inline operator fun Int16Array.set(index: Int, value: Int) {
     this[index] = value.toShort()
 }
+
+inline operator fun Float32Array.set(index: Int, value: Double) {
+    this[index] = value.toFloat()
+}

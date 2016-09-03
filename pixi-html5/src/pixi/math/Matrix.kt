@@ -1,19 +1,20 @@
 package pixi.math
 
 import org.khronos.webgl.Float32Array
+import pixi.utils.set
 
-data class Matrix(var a: Float = 1.0f, var b: Float = 0.0f,
-                  var c: Float = 0.0f, var d: Float = 1.0f,
-                  var tx: Float = 0.0f, var ty: Float = 0.0f) {
+data class Matrix(var a: Double = 1.0, var b: Double = 0.0,
+                  var c: Double = 0.0, var d: Double = 1.0,
+                  var tx: Double = 0.0, var ty: Double = 0.0) {
     var array: Float32Array? = null
 
     fun identity() {
-        a = 1.0f
-        b = 0.0f
-        c = 0.0f
-        d = 1.0f
-        tx = 0.0f
-        ty = 0.0f
+        a = 1.0
+        b = 0.0
+        c = 0.0
+        d = 1.0
+        tx = 0.0
+        ty = 0.0
     }
 
     fun toArray(transpose: Boolean, out: Float32Array? = null): Float32Array {

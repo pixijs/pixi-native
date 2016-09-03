@@ -112,14 +112,14 @@ class RenderTarget(val gl: GL, var width: Int, var height: Int,
 
         // TODO: make dest scale source
         if (!this.root) {
-            pm.a = 1f / destinationFrame.width * 2;
-            pm.d = 1f / destinationFrame.height * 2;
+            pm.a = 1.0 / destinationFrame.width * 2;
+            pm.d = 1.0 / destinationFrame.height * 2;
 
             pm.tx = -1 - _sourceFrame.x * pm.a;
             pm.ty = -1 - _sourceFrame.y * pm.d;
         } else {
-            pm.a = 1f / destinationFrame.width * 2;
-            pm.d = -1f / destinationFrame.height * 2;
+            pm.a = 1.0 / destinationFrame.width * 2;
+            pm.d = -1.0 / destinationFrame.height * 2;
 
             pm.tx = -1 - _sourceFrame.x * pm.a;
             pm.ty = 1 - _sourceFrame.y * pm.d;
