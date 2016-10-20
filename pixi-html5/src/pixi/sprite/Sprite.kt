@@ -2,9 +2,8 @@ package pixi.sprite
 
 import org.khronos.webgl.Float32Array
 import pixi.BlendMode
+import pixi.Real
 import pixi.display.Container
-import pixi.observable.Point
-import pixi.observable.PointObserver
 import pixi.renderers.WebGLRenderer
 import pixi.textures.Texture
 import pixi.utils.set
@@ -34,10 +33,9 @@ open class Sprite(texture: Texture = Texture.EMPTY) : Container() {
     var _textureID = -1
     var _transformID = -1
 
-    //TODO: find that name for supression
     //val anchor = Point(@Suppress("LEAKING_THIS") this)
 
-    val anchor = Point(transform)
+    val anchor = transform.newPoint(0.0, 0.0)
 
     fun calculateVertices() {
         if (_transformID == transform._worldID &&
@@ -52,10 +50,10 @@ open class Sprite(texture: Texture = Texture.EMPTY) : Container() {
         val orig = texture.orig
         val trim = texture.trim
         val wt = transform.worldTransform
-        var w0: Double
-        var w1: Double
-        var h0: Double
-        var h1: Double
+        var w0: Real
+        var w1: Real
+        var h0: Real
+        var h1: Real
 
         if (trim != null) {
             w1 = trim.x - anchor.x * orig.width;

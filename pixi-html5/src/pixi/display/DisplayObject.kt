@@ -2,48 +2,49 @@ package pixi.display
 
 import pixi.Color
 import pixi.math.Matrix
-import pixi.observable.Point
 import pixi.observable.Transform
 import pixi.renderers.WebGLRenderer
+import pixi.Real
+import pixi.observable.TransformBase.Point
 
 open class DisplayObject {
 //    var transform: TransformBase = Transform()
-    var transform = Transform()
+    val transform = Transform()
 
     open val children: MutableList<DisplayObject>?
         get() = null
 
     var position: Point
         get() = transform.position
-        set(value: Point) {
+        set(value) {
             transform.position.copy(value)
         }
 
     var scale: Point
         get() = transform.scale
-        set(value: Point) {
+        set(value) {
             transform.scale.copy(value)
         }
 
     var skew: Point
         get() = transform.skew
-        set(value: Point) {
+        set(value) {
             transform.skew.copy(value)
         }
 
     var pivot: Point
         get() = transform.pivot
-        set(value: Point) {
+        set(value) {
             transform.pivot.copy(value)
         }
 
-    var x: Double
+    var x: Real
         get() = transform.position.x
         set(value) {
             transform.position.x = value
         }
 
-    var y: Double
+    var y: Real
         get() = transform.position.y
         set(value) {
             transform.position.y = value

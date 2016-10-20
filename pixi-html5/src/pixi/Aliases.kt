@@ -1,3 +1,3 @@
 package pixi
 
-//typealias Real = Float
+typealias Real = Double

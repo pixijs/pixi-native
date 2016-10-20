@@ -1,25 +1,27 @@
 package pixi.observable
 
-class Skew(val transform: Transform, var _x: Double = 0.0, var _y: Double = 0.0) : PointObserver() {
-    var x: Double
+import pixi.Real
+
+class Skew(val transform: Transform, var _x: Real = 0.0, var _y: Real = 0.0) : TransformBase() {
+    var x: Real
         get() = _x
-        set(value: Double) {
+        set(value: Real) {
             if (_x != value) {
                 _x = value
                 transform.updateSkew()
             }
         }
 
-    var y: Double
+    var y: Real
         get() = _y
-        set(value: Double) {
+        set(value: Real) {
             if (_y != value) {
                 _y = value
                 transform.updateSkew()
             }
         }
 
-    fun setAll(v: Double) {
+    fun setAll(v: Real) {
         if (_x !== v || _y !== v) {
             _x = v;
             _y = v;
@@ -27,7 +29,7 @@ class Skew(val transform: Transform, var _x: Double = 0.0, var _y: Double = 0.0)
         }
     }
 
-    fun set(x: Double, y: Double) {
+    fun set(x: Real, y: Real) {
         if (_x !== x || _y !== y) {
             _x = x;
             _y = y;

@@ -1,10 +1,9 @@
 package pixi.observable
 
 import pixi.math.Matrix
-import pixi.observable.Point
-import pixi.observable.PointObserver
+import pixi.Real
 
-class Transform : PointObserver() {
+class Transform : TransformBase() {
     fun invalidateParent() {
         _parentID = -1;
     }
@@ -18,30 +17,30 @@ class Transform : PointObserver() {
 
     var _currentLocalID = 0;
 
-    val position = Point(this);
+    val position = Point(0.0, 0.0);
 
-    val scale = Point(this, 1.0, 1.0);
+    val scale = Point(1.0, 1.0);
 
-    val pivot = Point(this);
+    val pivot = Point(0.0, 0.0);
 
-    val skew = Point(this);
+    val skew = Point(0.0, 0.0);
 
-    private var _rotation: Double = 0.0;
-    private var _sr: Double = 0.0;
-    private var _cr: Double = 1.0;
+    private var _rotation: Real = 0.0;
+    private var _sr: Real = 0.0;
+    private var _cr: Real = 1.0;
 
-    private var rotation: Double
+    private var rotation: Real
         get() = _rotation
-        set(value: Double) {
+        set(value: Real) {
             _rotation = value;
             _sr = Math.sin(value);
             _cr = Math.cos(value);
         }
 
-    private var _cy: Double = 1.0;
-    private var _sy: Double = 0.0;
-    private var _nsx: Double = 0.0;
-    private var _cx: Double = 1.0;
+    private var _cy: Real = 1.0;
+    private var _sy: Real = 0.0;
+    private var _nsx: Real = 0.0;
+    private var _cx: Real = 1.0;
 
     fun updateSkew() {
         _cy = Math.cos(skew.y);

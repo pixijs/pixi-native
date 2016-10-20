@@ -2,10 +2,11 @@ package pixi.math
 
 import org.khronos.webgl.Float32Array
 import pixi.utils.set
+import pixi.Real
 
-data class Matrix(var a: Double = 1.0, var b: Double = 0.0,
-                  var c: Double = 0.0, var d: Double = 1.0,
-                  var tx: Double = 0.0, var ty: Double = 0.0) {
+data class Matrix(var a: Real = 1.0, var b: Real = 0.0,
+                  var c: Real = 0.0, var d: Real = 1.0,
+                  var tx: Real = 0.0, var ty: Real = 0.0) {
     var array: Float32Array? = null
 
     fun identity() {

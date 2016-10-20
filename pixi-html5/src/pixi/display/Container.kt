@@ -69,11 +69,9 @@ open class Container : DisplayObject() {
 //            return;
 //        }
 
-        val a: Array<Container> = children.asDynamic().array
-
         objectRenderWebGL(renderer);
-        for (child in a) {
-            child.renderWebGL(renderer);
+        for (i in 0..children.size - 1) {
+            children[i].renderWebGL(renderer);
         }
     }
 }
